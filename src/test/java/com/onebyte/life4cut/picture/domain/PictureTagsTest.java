@@ -67,4 +67,52 @@ class PictureTagsTest {
       assertThat(retainedTags.getTags().get(0).getName().getValue()).isEqualTo("태그1");
     }
   }
+
+  @Nested
+  class Has {
+
+    @Test
+    @DisplayName("태그 이름이 같은 태그가 있는지 확인한다")
+    void has() {
+      // given
+      List<String> tagNames = List.of("태그1", "태그2", "태그3");
+      List<PictureTag> tags =
+          tagNames.stream()
+              .map(
+                  name ->
+                      pictureTagFixtureFactory.make(
+                          (tag, builder) -> builder.set("name", PictureTagName.of(name))))
+              .toList();
+
+      PictureTags pictureTags = new PictureTags(tags);
+
+      // when
+      boolean hasTag = pictureTags.has("태그2");
+
+      // then
+      assertThat(hasTag).isTrue();
+    }
+
+    @Test
+    @DisplayName("태그 이름이 같은 태그가 없는지 확인한다")
+    void hasNot() {
+      // given
+      List<String> tagNames = List.of("태그1", "태그2", "태그3");
+      List<PictureTag> tags =
+          tagNames.stream()
+              .map(
+                  name ->
+                      pictureTagFixtureFactory.make(
+                          (tag, builder) -> builder.set("name", PictureTagName.of(name))))
+              .toList();
+
+      PictureTags pictureTags = new PictureTags(tags);
+
+      // when
+      boolean hasTag = pictureTags.has("태그4");
+
+      // then
+      assertThat(hasTag).isFalse();
+    }
+  }
 }

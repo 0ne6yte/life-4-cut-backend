@@ -29,6 +29,10 @@ public class PictureTags {
             .toList());
   }
 
+  public boolean has(@Nonnull String tagName) {
+    return tags.stream().anyMatch(tag -> tag.isNameEqualsTo(tagName));
+  }
+
   @Nonnull
   public List<PictureTag> getTags() {
     return Collections.unmodifiableList(tags);

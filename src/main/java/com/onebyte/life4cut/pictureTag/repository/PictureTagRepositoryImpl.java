@@ -4,6 +4,7 @@ import static com.onebyte.life4cut.picture.domain.QPictureTag.pictureTag;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.onebyte.life4cut.picture.domain.PictureTag;
+import com.onebyte.life4cut.picture.domain.PictureTags;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nonnull;
@@ -22,15 +23,16 @@ public class PictureTagRepositoryImpl implements PictureTagRepository {
   private final EntityManager em;
   private final JPAQueryFactory query;
 
-  public List<PictureTag> findByNames(@Nonnull Long albumId, @Nonnull List<String> names) {
+  public PictureTags findByNames(@Nonnull Long albumId, @Nonnull List<String> names) {
     if (names.isEmpty()) {
-      return Collections.emptyList();
+      return new PictureTags(Collections.emptyList());
     }
 
-    return query
-        .selectFrom(pictureTag)
-        .where(pictureTag.albumId.eq(albumId), pictureTag.name.value.in(names))
-        .fetch();
+    return new PictureTags(
+        query
+            .selectFrom(pictureTag)
+            .where(pictureTag.albumId.eq(albumId), pictureTag.name.value.in(names))
+            .fetch());
   }
 
   @Override

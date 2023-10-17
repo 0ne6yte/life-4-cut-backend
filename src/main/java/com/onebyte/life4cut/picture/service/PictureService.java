@@ -11,6 +11,7 @@ import com.onebyte.life4cut.common.constants.S3Env;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.picture.domain.PictureTags;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
 import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
@@ -72,13 +73,10 @@ public class PictureService {
       throw new AlbumDoesNotHaveSlotException();
     }
 
-    List<PictureTag> pictureTags = pictureTagRepository.findByNames(albumId, tags);
+    PictureTags pictureTags = pictureTagRepository.findByNames(albumId, tags);
     List<PictureTag> newPictureTags =
         tags.stream()
-            .filter(
-                tag ->
-                    pictureTags.stream()
-                        .noneMatch(pictureTag -> pictureTag.getName().getValue().equals(tag)))
+            .filter(tag -> !pictureTags.has(tag))
             .map(tag -> PictureTag.create(albumId, authorId, tag))
             .toList();
 
@@ -91,10 +89,10 @@ public class PictureService {
     slot.addPicture(picture.getId());
 
     pictureTagRepository.saveAll(newPictureTags);
-    pictureTags.forEach(PictureTag::restoreIfRequired);
+    pictureTags.getTags().forEach(PictureTag::restoreIfRequired);
 
     List<PictureTagRelation> newPictureTagRelations =
-        Stream.concat(pictureTags.stream(), newPictureTags.stream())
+        Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
             .map(
                 pictureTag ->
                     PictureTagRelation.create(picture.getId(), albumId, pictureTag.getId()))
@@ -134,24 +132,21 @@ public class PictureService {
     picture.updateIfRequired(content, picturedAt, key);
 
     if (tags != null) {
-      List<PictureTag> pictureTags = pictureTagRepository.findByNames(albumId, tags);
+      PictureTags pictureTags = pictureTagRepository.findByNames(albumId, tags);
       List<PictureTag> newPictureTags =
           tags.stream()
-              .filter(
-                  tag ->
-                      pictureTags.stream()
-                          .noneMatch(pictureTag -> pictureTag.getName().getValue().equals(tag)))
+              .filter(tag -> !pictureTags.has(tag))
               .map(tag -> PictureTag.create(albumId, authorId, tag))
               .toList();
 
       pictureTagRepository.saveAll(newPictureTags);
-      pictureTags.forEach(PictureTag::restoreIfRequired);
+      pictureTags.getTags().forEach(PictureTag::restoreIfRequired);
 
       List<PictureTagRelation> pictureTagRelations =
           pictureTagRelationRepository.findByPictureId(pictureId);
 
       List<PictureTagRelation> newPictureTagRelations =
-          Stream.concat(pictureTags.stream(), newPictureTags.stream())
+          Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
               .filter(
                   pictureTag ->
                       pictureTagRelations.stream()
@@ -168,7 +163,7 @@ public class PictureService {
           pictureTagRelations.stream()
               .filter(
                   pictureTagRelation ->
-                      pictureTags.stream()
+                      pictureTags.getTags().stream()
                           .anyMatch(
                               pictureTag ->
                                   pictureTagRelation.getTagId().equals(pictureTag.getId())))
