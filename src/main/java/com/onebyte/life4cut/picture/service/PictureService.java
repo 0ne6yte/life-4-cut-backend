@@ -11,6 +11,7 @@ import com.onebyte.life4cut.common.constants.S3Env;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.picture.domain.PictureTagRelations;
 import com.onebyte.life4cut.picture.domain.PictureTags;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
@@ -142,48 +143,33 @@ public class PictureService {
       pictureTagRepository.saveAll(newPictureTags);
       pictureTags.getTags().forEach(PictureTag::restoreIfRequired);
 
-      List<PictureTagRelation> pictureTagRelations =
+      PictureTagRelations pictureTagRelations =
           pictureTagRelationRepository.findByPictureId(pictureId);
 
       List<PictureTagRelation> newPictureTagRelations =
           Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
-              .filter(
-                  pictureTag ->
-                      pictureTagRelations.stream()
-                          .noneMatch(
-                              pictureTagRelation ->
-                                  pictureTagRelation.getTagId().equals(pictureTag.getId())))
+              .filter(pictureTag -> !pictureTagRelations.has(pictureTag.getId()))
               .map(
                   pictureTag ->
                       PictureTagRelation.create(
                           picture.getId(), picture.getAlbumId(), pictureTag.getId()))
               .toList();
 
-      List<PictureTagRelation> pictureTagRelationsToRestoreIfRequired =
-          pictureTagRelations.stream()
-              .filter(
-                  pictureTagRelation ->
-                      pictureTags.getTags().stream()
-                          .anyMatch(
-                              pictureTag ->
-                                  pictureTagRelation.getTagId().equals(pictureTag.getId())))
-              .toList();
+      PictureTagRelations pictureTagRelationsToRestoreIfRequired =
+          pictureTagRelations.retainAll(
+              pictureTags.getTags().stream().map(PictureTag::getId).toList());
 
-      List<PictureTagRelation> pictureTagRelationsToDelete =
-          pictureTagRelations.stream()
-              .filter(
-                  pictureTagRelation ->
-                      pictureTagRelationsToRestoreIfRequired.stream()
-                          .noneMatch(
-                              newPictureTagRelation ->
-                                  pictureTagRelation
-                                      .getTagId()
-                                      .equals(newPictureTagRelation.getTagId())))
-              .toList();
+      PictureTagRelations pictureTagRelationsToDelete =
+          pictureTagRelations.removeAll(
+              pictureTags.getTags().stream().map(PictureTag::getId).toList());
 
       pictureTagRelationRepository.saveAll(newPictureTagRelations);
-      pictureTagRelationsToRestoreIfRequired.forEach(PictureTagRelation::restoreIfRequired);
-      pictureTagRelationsToDelete.forEach(pictureTagRelation -> pictureTagRelation.delete(now));
+      pictureTagRelationsToRestoreIfRequired
+          .getRelations()
+          .forEach(PictureTagRelation::restoreIfRequired);
+      pictureTagRelationsToDelete
+          .getRelations()
+          .forEach(pictureTagRelation -> pictureTagRelation.delete(now));
     }
   }
 

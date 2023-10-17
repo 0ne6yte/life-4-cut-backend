@@ -22,6 +22,7 @@ import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.picture.domain.PictureTags;
 import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
 import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
@@ -350,7 +351,7 @@ class PictureServiceTest {
                 builder.set("deletedAt", LocalDateTime.now());
               });
       when(pictureTagRepository.findByNames(albumId, tags))
-          .thenReturn(List.of(existPictureTag, deletedPictureTag));
+          .thenReturn(new PictureTags(List.of(existPictureTag, deletedPictureTag)));
 
       when(fileUploader.upload(any())).thenReturn(new FileUploadResponse("test"));
 

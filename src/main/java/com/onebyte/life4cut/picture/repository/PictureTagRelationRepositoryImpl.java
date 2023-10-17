@@ -1,6 +1,7 @@
 package com.onebyte.life4cut.picture.repository;
 
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.picture.domain.PictureTagRelations;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,12 @@ public class PictureTagRelationRepositoryImpl implements PictureTagRelationRepos
   }
 
   @Override
-  public List<PictureTagRelation> findByPictureId(Long pictureId) {
-    return em.createQuery(
-            "SELECT ptr FROM PictureTagRelation ptr WHERE ptr.pictureId = :pictureId",
-            PictureTagRelation.class)
-        .setParameter("pictureId", pictureId)
-        .getResultList();
+  public PictureTagRelations findByPictureId(Long pictureId) {
+    return new PictureTagRelations(
+        em.createQuery(
+                "SELECT ptr FROM PictureTagRelation ptr WHERE ptr.pictureId = :pictureId",
+                PictureTagRelation.class)
+            .setParameter("pictureId", pictureId)
+            .getResultList());
   }
 }
