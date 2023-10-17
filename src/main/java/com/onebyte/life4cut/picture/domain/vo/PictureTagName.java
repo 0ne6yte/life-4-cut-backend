@@ -32,4 +32,8 @@ public class PictureTagName {
 
     return new PictureTagName(value.trim());
   }
+
+  public boolean is(String name) {
+    return this.value.equals(name);
+  }
 }

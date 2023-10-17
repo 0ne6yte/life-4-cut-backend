@@ -55,6 +55,10 @@ public class PictureTag extends BaseEntity {
     }
   }
 
+  public boolean isNameEqualsTo(@Nonnull String name) {
+    return this.name.is(name);
+  }
+
   private boolean isDeleted() {
     return deletedAt != null;
   }
