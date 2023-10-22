@@ -32,7 +32,7 @@ class PictureTagsTest {
       PictureTags pictureTags = new PictureTags(tags);
 
       // when
-      PictureTags retainedTags = pictureTags.retainAll("태그2", "태그3");
+      PictureTags retainedTags = pictureTags.retainAll(List.of("태그2", "태그3"));
 
       // then
       assertThat(retainedTags.getTags()).hasSize(2);
@@ -60,7 +60,7 @@ class PictureTagsTest {
       PictureTags pictureTags = new PictureTags(tags);
 
       // when
-      PictureTags retainedTags = pictureTags.removeAll("태그2", "태그3");
+      PictureTags retainedTags = pictureTags.removeAll(List.of("태그2", "태그3"));
 
       // then
       assertThat(retainedTags.getTags()).hasSize(1);

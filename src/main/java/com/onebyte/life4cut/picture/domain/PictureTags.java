@@ -1,7 +1,6 @@
 package com.onebyte.life4cut.picture.domain;
 
 import jakarta.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,19 +13,15 @@ public class PictureTags {
   }
 
   @Nonnull
-  public PictureTags retainAll(@Nonnull String... tagNames) {
+  public PictureTags retainAll(@Nonnull List<String> tagNames) {
     return new PictureTags(
-        tags.stream()
-            .filter(tag -> Arrays.stream(tagNames).anyMatch(tag::isNameEqualsTo))
-            .toList());
+        tags.stream().filter(tag -> tagNames.stream().anyMatch(tag::isNameEqualsTo)).toList());
   }
 
   @Nonnull
-  public PictureTags removeAll(@Nonnull String... tagNames) {
+  public PictureTags removeAll(@Nonnull List<String> tagNames) {
     return new PictureTags(
-        tags.stream()
-            .filter(tag -> Arrays.stream(tagNames).noneMatch(tag::isNameEqualsTo))
-            .toList());
+        tags.stream().filter(tag -> tagNames.stream().noneMatch(tag::isNameEqualsTo)).toList());
   }
 
   public boolean has(@Nonnull String tagName) {
