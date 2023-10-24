@@ -1,9 +1,11 @@
 package com.onebyte.life4cut.user.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.onebyte.life4cut.common.annotation.RepositoryTest;
 import com.onebyte.life4cut.fixture.UserFixtureFactory;
 import com.onebyte.life4cut.user.domain.User;
-import org.assertj.core.api.Assertions;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,11 +19,11 @@ class UserRepositoryImplTest {
   @Autowired private UserFixtureFactory userFixtureFactory;
 
   @Nested
-  class findUser {
+  class findUserById {
 
     @DisplayName("유저를 아이디로 조회한다.")
     @Test
-    void findUserById() {
+    void success() {
       // given
       String email = "pythonstrup@gmail.com";
       String nickname = "bell";
@@ -37,7 +39,20 @@ class UserRepositoryImplTest {
       User result = userRepositoryImpl.findUser(user.getId()).get();
 
       // then
-      Assertions.assertThat(result.getId()).isEqualTo(user.getId());
+      assertThat(result.getId()).isEqualTo(user.getId());
+    }
+
+    @DisplayName("유저를 아이디로 조회했는데 존재하지 않으면 빈 Optional을 반환한다.")
+    @Test
+    void empty() {
+      // given
+      long id = 1L;
+
+      // when
+      Optional<User> result = userRepositoryImpl.findUser(id);
+
+      // then
+      assertThat(result).isEmpty();
     }
   }
 }
