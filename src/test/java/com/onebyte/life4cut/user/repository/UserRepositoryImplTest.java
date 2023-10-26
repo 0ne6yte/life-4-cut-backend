@@ -55,4 +55,28 @@ class UserRepositoryImplTest {
       assertThat(result).isEmpty();
     }
   }
+
+  @Nested
+  class findUserByNickname {
+    @DisplayName("닉네임으로 유저를 조회한다.")
+    @Test
+    void success() {
+      // given
+      String email = "pythonstrup@gmail.com";
+      String nickname = "bell";
+      User user =
+          userFixtureFactory.save(
+              (entity, builder) -> {
+                builder.setNull("deletedAt");
+                builder.set("email", email);
+                builder.set("nickname", nickname);
+              });
+
+      // when
+      User result = userRepositoryImpl.findUserByNickname(nickname).get();
+
+      // then
+      assertThat(result.getId()).isEqualTo(user.getId());
+    }
+  }
 }
