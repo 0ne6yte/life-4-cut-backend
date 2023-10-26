@@ -78,5 +78,18 @@ class UserRepositoryImplTest {
       // then
       assertThat(result.getId()).isEqualTo(user.getId());
     }
+
+    @DisplayName("닉네임으로 유저를 조회했는데 존재하지 않으면 빈 Optional 객체를 반환한다.")
+    @Test
+    void empty() {
+      // given
+      String nickname = "bell";
+
+      // when
+      Optional<User> result = userRepositoryImpl.findUserByNickname(nickname);
+
+      // then
+      assertThat(result).isEmpty();
+    }
   }
 }
