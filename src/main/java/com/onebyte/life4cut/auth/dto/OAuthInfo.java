@@ -3,11 +3,14 @@ package com.onebyte.life4cut.auth.dto;
 import com.onebyte.life4cut.auth.exception.NotSupportOAuthType;
 import com.onebyte.life4cut.common.constants.OAuthType;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuthInfo {
 
   @Value("${auth.kakao.secret}")
