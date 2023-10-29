@@ -101,7 +101,6 @@ public class PictureService {
       @Nonnull final Long authorId,
       @Nonnull final Long albumId,
       @Nonnull final Long pictureId,
-      @Nonnull final LocalDateTime now,
       @Nullable final String content,
       @Nullable final List<String> tags,
       @Nullable final LocalDateTime picturedAt,

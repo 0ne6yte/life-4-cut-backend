@@ -15,7 +15,6 @@ import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.service.PictureTagService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -77,7 +76,6 @@ public class AlbumController {
         userDetails.getUserId(),
         albumId,
         pictureId,
-        LocalDateTime.now(),
         request.getContent(),
         request.tags(),
         request.getPicturedAt(),

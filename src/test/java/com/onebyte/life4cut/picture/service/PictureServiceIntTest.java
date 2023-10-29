@@ -102,7 +102,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
 
       // then
       assertThat(throwable).isInstanceOf(PictureNotFoundException.class);
@@ -135,7 +135,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(PictureNotFoundException.class);
     }
@@ -167,7 +167,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(AlbumNotFoundException.class);
     }
@@ -204,7 +204,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
 
       // then
       assertThat(throwable).isInstanceOf(UserAlbumRolePermissionException.class);
@@ -250,7 +250,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(UserAlbumRolePermissionException.class);
     }
@@ -295,8 +295,7 @@ public class PictureServiceIntTest {
       when(fileUploader.upload(Mockito.any())).thenReturn(new FileUploadResponse("key"));
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -341,8 +340,7 @@ public class PictureServiceIntTest {
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -388,8 +386,7 @@ public class PictureServiceIntTest {
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -463,8 +460,7 @@ public class PictureServiceIntTest {
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = entityManager.find(Picture.class, pictureId);

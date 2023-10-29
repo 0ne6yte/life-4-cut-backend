@@ -213,7 +213,7 @@ class AlbumControllerTest extends ControllerTest {
 
       doNothing()
           .when(pictureService)
-          .updatePicture(any(), any(), any(), any(), any(), any(), any(), any());
+          .updatePicture(any(), any(), any(), any(), any(), any(), any());
 
       // when
       ResultActions result =
