@@ -25,7 +25,6 @@ import com.onebyte.life4cut.picture.domain.PictureTagRelation;
 import com.onebyte.life4cut.picture.domain.PictureTagRelations;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepositoryImpl;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepositoryImpl;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
@@ -77,7 +76,6 @@ public class PictureServiceIntTest {
             new AlbumRepositoryImpl(query),
             new UserAlbumRepositoryImpl(query),
             new PictureTagRepositoryImpl(entityManager, query),
-            new PictureTagRelationRepositoryImpl(entityManager),
             pictureRepository,
             fileUploader,
             s3Env);

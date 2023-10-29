@@ -11,7 +11,6 @@ import com.onebyte.life4cut.common.constants.S3Env;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
@@ -44,7 +43,6 @@ public class PictureService {
   private final AlbumRepository albumRepository;
   private final UserAlbumRepository userAlbumRepository;
   private final PictureTagRepository pictureTagRepository;
-  private final PictureTagRelationRepository pictureTagRelationRepository;
   private final PictureRepository pictureRepository;
   private final FileUploader fileUploader;
   private final S3Env s3Env;

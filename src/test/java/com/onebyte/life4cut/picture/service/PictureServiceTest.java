@@ -21,7 +21,6 @@ import com.onebyte.life4cut.fixture.SlotFixtureFactory;
 import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.domain.PictureTags;
 import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
@@ -50,8 +49,6 @@ class PictureServiceTest {
   private final SlotRepository slotRepository = mock(SlotRepository.class);
   private final UserAlbumRepository userAlbumRepository = mock(UserAlbumRepository.class);
   private final PictureTagRepository pictureTagRepository = mock(PictureTagRepository.class);
-  private final PictureTagRelationRepository pictureTagRelationRepository =
-      mock(PictureTagRelationRepository.class);
   private final PictureRepository pictureRepository = mock(PictureRepository.class);
   private final FileUploader fileUploader = mock(FileUploader.class);
   private final S3Env s3Env = new S3Env("test");
@@ -61,7 +58,6 @@ class PictureServiceTest {
           albumRepository,
           userAlbumRepository,
           pictureTagRepository,
-          pictureTagRelationRepository,
           pictureRepository,
           fileUploader,
           s3Env);
