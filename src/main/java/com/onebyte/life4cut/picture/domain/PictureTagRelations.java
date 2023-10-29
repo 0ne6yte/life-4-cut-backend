@@ -21,6 +21,13 @@ public class PictureTagRelations {
     this.relations = relations;
   }
 
+  public static PictureTagRelations of(Picture picture, PictureTags pictureTags) {
+    return new PictureTagRelations(
+        pictureTags.getTags().stream()
+            .map(pictureTag -> PictureTagRelation.create(picture, pictureTag.getId()))
+            .toList());
+  }
+
   @Nonnull
   public PictureTagRelations retainAll(@Nonnull List<Long> tagIds) {
     if (tagIds.isEmpty()) {

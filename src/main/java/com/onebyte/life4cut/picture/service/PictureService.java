@@ -74,29 +74,30 @@ public class PictureService {
       throw new AlbumDoesNotHaveSlotException();
     }
 
-    PictureTags pictureTags = pictureTagRepository.findByNames(albumId, tags);
+    PictureTags existingPictureTags = pictureTagRepository.findByNames(albumId, tags);
     List<PictureTag> newPictureTags =
         tags.stream()
-            .filter(tag -> !pictureTags.has(tag))
+            .filter(tag -> !existingPictureTags.has(tag))
             .map(tag -> PictureTag.create(albumId, authorId, tag))
             .toList();
 
     FileUploadResponse response =
         fileUploader.upload(MultipartFileUploadRequest.of(image, s3Env.bucket()));
 
-    Picture picture = Picture.create(authorId, albumId, response.key(), content, picturedAt);
+    pictureTagRepository.saveAll(newPictureTags);
+    existingPictureTags.getTags().forEach(PictureTag::restoreIfRequired);
+
+    Picture picture =
+        Picture.create(
+            authorId,
+            albumId,
+            response.key(),
+            content,
+            picturedAt,
+            existingPictureTags.addAll(newPictureTags));
 
     pictureRepository.save(picture);
     slot.addPicture(picture.getId());
-
-    pictureTagRepository.saveAll(newPictureTags);
-    pictureTags.getTags().forEach(PictureTag::restoreIfRequired);
-
-    List<PictureTagRelation> newPictureTagRelations =
-        Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
-            .map(pictureTag -> PictureTagRelation.create(picture, albumId, pictureTag.getId()))
-            .toList();
-    pictureTagRelationRepository.saveAll(newPictureTagRelations);
 
     return picture.getId();
   }
@@ -147,9 +148,7 @@ public class PictureService {
       List<PictureTagRelation> newPictureTagRelations =
           Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
               .filter(pictureTag -> !pictureTagRelations.has(pictureTag.getId()))
-              .map(
-                  pictureTag ->
-                      PictureTagRelation.create(picture, picture.getAlbumId(), pictureTag.getId()))
+              .map(pictureTag -> PictureTagRelation.create(picture, pictureTag.getId()))
               .toList();
 
       PictureTagRelations pictureTagRelationsToRestoreIfRequired =

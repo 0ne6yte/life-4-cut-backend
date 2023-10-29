@@ -55,13 +55,15 @@ public class Picture extends BaseEntity {
       @Nonnull Long albumId,
       @Nonnull String path,
       @Nonnull String content,
-      @Nonnull LocalDateTime picturedAt) {
+      @Nonnull LocalDateTime picturedAt,
+      @Nonnull PictureTags pictureTags) {
     Picture picture = new Picture();
     picture.userId = userId;
     picture.albumId = albumId;
     picture.path = path;
     picture.content = content.trim();
     picture.picturedAt = picturedAt;
+    picture.pictureTagRelations = PictureTagRelations.of(picture, pictureTags);
     return picture;
   }
 

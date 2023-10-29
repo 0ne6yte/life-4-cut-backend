@@ -43,11 +43,10 @@ public class PictureTagRelation extends BaseEntity {
   private LocalDateTime deletedAt;
 
   @Nonnull
-  public static PictureTagRelation create(
-      @Nonnull Picture picture, @Nonnull Long albumId, @Nonnull Long tagId) {
+  public static PictureTagRelation create(@Nonnull Picture picture, @Nonnull Long tagId) {
     PictureTagRelation pictureTagRelation = new PictureTagRelation();
     pictureTagRelation.picture = picture;
-    pictureTagRelation.albumId = albumId;
+    pictureTagRelation.albumId = picture.getAlbumId();
     pictureTagRelation.tagId = tagId;
     return pictureTagRelation;
   }
