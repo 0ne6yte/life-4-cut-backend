@@ -2,6 +2,7 @@ package com.onebyte.life4cut.picture.domain.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

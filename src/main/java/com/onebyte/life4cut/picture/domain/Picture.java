@@ -1,6 +1,7 @@
 package com.onebyte.life4cut.picture.domain;
 
 import com.onebyte.life4cut.common.entity.BaseEntity;
+import com.onebyte.life4cut.pictureTag.domain.PictureTags;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;

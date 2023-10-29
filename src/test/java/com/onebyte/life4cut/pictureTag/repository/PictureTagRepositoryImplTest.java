@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.onebyte.life4cut.common.annotation.RepositoryTest;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
-import com.onebyte.life4cut.picture.domain.PictureTag;
-import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

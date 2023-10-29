@@ -1,8 +1,8 @@
 package com.onebyte.life4cut.picture.repository;
 
 import static com.onebyte.life4cut.picture.domain.QPicture.picture;
-import static com.onebyte.life4cut.picture.domain.QPictureTag.pictureTag;
 import static com.onebyte.life4cut.picture.domain.QPictureTagRelation.pictureTagRelation;
+import static com.onebyte.life4cut.pictureTag.domain.QPictureTag.pictureTag;
 import static com.querydsl.core.types.dsl.Expressions.stringTemplate;
 
 import com.onebyte.life4cut.picture.domain.Picture;

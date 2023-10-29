@@ -1,4 +1,4 @@
-package com.onebyte.life4cut.picture.domain.vo;
+package com.onebyte.life4cut.pictureTag.domain.vo;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;

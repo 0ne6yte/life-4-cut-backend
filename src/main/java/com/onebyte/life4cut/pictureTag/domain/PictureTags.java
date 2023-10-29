@@ -1,4 +1,4 @@
-package com.onebyte.life4cut.picture.domain;
+package com.onebyte.life4cut.pictureTag.domain;
 
 import jakarta.annotation.Nonnull;
 import java.util.Collections;

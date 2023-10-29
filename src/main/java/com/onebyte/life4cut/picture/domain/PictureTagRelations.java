@@ -1,5 +1,6 @@
 package com.onebyte.life4cut.picture.domain;
 
+import com.onebyte.life4cut.pictureTag.domain.PictureTags;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;

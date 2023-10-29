@@ -1,6 +1,6 @@
 package com.onebyte.life4cut.album.controller.dto;
 
-import com.onebyte.life4cut.picture.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import java.util.List;
 
 public record SearchTagsResponse(List<TagResponse> tags) {
