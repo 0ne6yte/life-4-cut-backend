@@ -2,14 +2,12 @@ package com.onebyte.life4cut.picture.domain;
 
 import com.onebyte.life4cut.common.entity.BaseEntity;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +23,7 @@ import lombok.NoArgsConstructor;
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class PictureTagRelation extends BaseEntity {
+
   @Nonnull
   @ManyToOne
   @JoinColumn(name = "picture_id", nullable = false)
@@ -38,10 +37,6 @@ public class PictureTagRelation extends BaseEntity {
   @Column(nullable = false, name = "tag_id")
   private Long tagId;
 
-  @Nullable
-  @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
-
   @Nonnull
   public static PictureTagRelation create(@Nonnull Picture picture, @Nonnull Long tagId) {
     PictureTagRelation pictureTagRelation = new PictureTagRelation();
@@ -49,27 +44,5 @@ public class PictureTagRelation extends BaseEntity {
     pictureTagRelation.albumId = picture.getAlbumId();
     pictureTagRelation.tagId = tagId;
     return pictureTagRelation;
-  }
-
-  public void restoreIfRequired() {
-    if (isDeleted()) {
-      restore();
-    }
-  }
-
-  public void delete(@Nonnull LocalDateTime deletedAt) {
-    if (isDeleted()) {
-      return;
-    }
-
-    this.deletedAt = deletedAt;
-  }
-
-  private boolean isDeleted() {
-    return deletedAt != null;
-  }
-
-  private void restore() {
-    deletedAt = null;
   }
 }

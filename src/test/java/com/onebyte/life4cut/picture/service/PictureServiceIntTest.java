@@ -118,6 +118,8 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 2L);
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
@@ -148,6 +150,8 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 1L);
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
@@ -183,6 +187,8 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
@@ -219,6 +225,8 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -263,6 +271,8 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
                 builder.set("path", "originKey");
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -310,6 +320,8 @@ public class PictureServiceIntTest {
                 builder.set("albumId", album.getId());
                 builder.set("content", "originContent");
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -355,6 +367,8 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -395,15 +409,7 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.setNull("deletedAt");
               });
-      Picture picture =
-          pictureFixtureFactory.save(
-              (entity, builder) -> {
-                builder.set("albumId", album.getId());
-                builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
-                builder.set(
-                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
-                builder.setNull("deletedAt");
-              });
+
       UserAlbum useralbum =
           userAlbumFixtureFactory.save(
               (entity, builder) -> {
@@ -431,22 +437,23 @@ public class PictureServiceIntTest {
                 builder.setNull("deletedAt");
               });
 
-      PictureTagRelation relationToDelete =
-          pictureTagRelationFixtureFactory.save(
+      Picture picture =
+          pictureFixtureFactory.save(
               (entity, builder) -> {
-                builder.set("picture", picture);
+                builder.setNull("id");
                 builder.set("albumId", album.getId());
-                builder.set("tagId", pictureTag1.getId());
+                builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
-      PictureTagRelation relationToRestore =
-          pictureTagRelationFixtureFactory.save(
-              (entity, builder) -> {
-                builder.set("picture", picture);
-                builder.set("albumId", album.getId());
-                builder.set("tagId", pictureTag2.getId());
-                builder.set("deletedAt", LocalDateTime.now());
-              });
+
+      pictureTagRelationFixtureFactory.save(
+          (entity, builder) -> {
+            builder.set("picture", picture);
+            builder.set("albumId", album.getId());
+            builder.set("tagId", pictureTag1.getId());
+          });
 
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
@@ -480,13 +487,6 @@ public class PictureServiceIntTest {
           .forEach(
               relation -> {
                 assertThat(relation.getPicture().getId()).isEqualTo(pictureId);
-                if (relation.getId().equals(relationToDelete.getId())) {
-                  assertThat(relation.getDeletedAt()).isNotNull();
-                } else if (relation.getId().equals(relationToRestore.getId())) {
-                  assertThat(relation.getDeletedAt()).isNull();
-                } else {
-                  assertThat(relation.getDeletedAt()).isNull();
-                }
               });
     }
   }

@@ -28,6 +28,26 @@ public class PictureTagRelations {
             .toList());
   }
 
+  public PictureTagRelations update(Picture picture, PictureTags pictureTags) {
+    relations.removeAll(
+        relations.stream()
+            .filter(
+                relation ->
+                    pictureTags.getTags().stream()
+                        .noneMatch(pictureTag -> relation.getTagId().equals(pictureTag.getId())))
+            .toList());
+
+    pictureTags.getTags().stream()
+        .filter(
+            pictureTag ->
+                relations.stream()
+                    .noneMatch(relation -> relation.getTagId().equals(pictureTag.getId())))
+        .forEach(
+            pictureTag -> relations.add(PictureTagRelation.create(picture, pictureTag.getId())));
+
+    return this;
+  }
+
   @Nonnull
   public PictureTagRelations retainAll(@Nonnull List<Long> tagIds) {
     if (tagIds.isEmpty()) {

@@ -83,4 +83,8 @@ public class Picture extends BaseEntity {
       this.path = path;
     }
   }
+
+  public void updateTags(@Nonnull PictureTags pictureTags) {
+    this.pictureTagRelations = this.pictureTagRelations.update(this, pictureTags);
+  }
 }
