@@ -29,6 +29,11 @@ public class PictureTagRelations {
             .toList());
   }
 
+  /**
+   * 태그 변경시 일반적인 vo 사용방법대로 새로운 PictureTagRelations를 생성하도록 하려고 했었음. 그러나 persist시, Hibernate는 컬렉션 추적
+   * 관리를 위해 PersistentBag이라는 wrapper 클래스로 감싸고, 참조를 변경하게 되면 예외를 발생시킴. 그래서 collection을 변경하는 방식으로 구현 및
+   * 외부에서는 이를 모르게 새로운 vo가 만들어진 것 처럼 사용하도록 함.
+   */
   public PictureTagRelations update(Picture picture, PictureTags pictureTags) {
     relations.removeAll(
         relations.stream()
