@@ -94,9 +94,7 @@ public class PictureService {
 
     List<PictureTagRelation> newPictureTagRelations =
         Stream.concat(pictureTags.getTags().stream(), newPictureTags.stream())
-            .map(
-                pictureTag ->
-                    PictureTagRelation.create(picture.getId(), albumId, pictureTag.getId()))
+            .map(pictureTag -> PictureTagRelation.create(picture, albumId, pictureTag.getId()))
             .toList();
     pictureTagRelationRepository.saveAll(newPictureTagRelations);
 
@@ -151,8 +149,7 @@ public class PictureService {
               .filter(pictureTag -> !pictureTagRelations.has(pictureTag.getId()))
               .map(
                   pictureTag ->
-                      PictureTagRelation.create(
-                          picture.getId(), picture.getAlbumId(), pictureTag.getId()))
+                      PictureTagRelation.create(picture, picture.getAlbumId(), pictureTag.getId()))
               .toList();
 
       PictureTagRelations pictureTagRelationsToRestoreIfRequired =

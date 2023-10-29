@@ -6,6 +6,8 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -24,8 +26,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class PictureTagRelation extends BaseEntity {
   @Nonnull
-  @Column(nullable = false, name = "picture_id")
-  private Long pictureId;
+  @ManyToOne
+  @JoinColumn(name = "picture_id", nullable = false)
+  private Picture picture;
 
   @Nonnull
   @Column(nullable = false, name = "album_id")
@@ -41,9 +44,9 @@ public class PictureTagRelation extends BaseEntity {
 
   @Nonnull
   public static PictureTagRelation create(
-      @Nonnull Long pictureId, @Nonnull Long albumId, @Nonnull Long tagId) {
+      @Nonnull Picture picture, @Nonnull Long albumId, @Nonnull Long tagId) {
     PictureTagRelation pictureTagRelation = new PictureTagRelation();
-    pictureTagRelation.pictureId = pictureId;
+    pictureTagRelation.picture = picture;
     pictureTagRelation.albumId = albumId;
     pictureTagRelation.tagId = tagId;
     return pictureTagRelation;

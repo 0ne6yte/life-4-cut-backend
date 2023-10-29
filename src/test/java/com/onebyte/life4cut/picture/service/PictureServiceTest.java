@@ -404,13 +404,13 @@ class PictureServiceTest {
       assertThat(newPictureTagRelations).hasSize(3);
       assertThat(newPictureTagRelations.get(0).getTagId()).isEqualTo(1L);
       assertThat(newPictureTagRelations.get(0).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(0).getPictureId()).isEqualTo(1L);
+      assertThat(newPictureTagRelations.get(0).getPicture().getId()).isEqualTo(1L);
       assertThat(newPictureTagRelations.get(1).getTagId()).isEqualTo(2L);
       assertThat(newPictureTagRelations.get(1).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(1).getPictureId()).isEqualTo(1L);
+      assertThat(newPictureTagRelations.get(1).getPicture().getId()).isEqualTo(1L);
       assertThat(newPictureTagRelations.get(2).getTagId()).isEqualTo(10L);
       assertThat(newPictureTagRelations.get(2).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(2).getPictureId()).isEqualTo(1L);
+      assertThat(newPictureTagRelations.get(2).getPicture().getId()).isEqualTo(1L);
 
       assertThat(deletedPictureTag.getDeletedAt()).isNull();
     }

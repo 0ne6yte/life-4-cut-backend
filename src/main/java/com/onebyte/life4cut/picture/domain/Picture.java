@@ -4,6 +4,7 @@ import com.onebyte.life4cut.common.entity.BaseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -45,6 +46,8 @@ public class Picture extends BaseEntity {
   @Nullable
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
+
+  @Nonnull @Embedded private PictureTagRelations pictureTagRelations;
 
   @Nonnull
   public static Picture create(

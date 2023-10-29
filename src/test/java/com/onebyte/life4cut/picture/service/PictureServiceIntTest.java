@@ -23,6 +23,7 @@ import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.picture.domain.PictureTagRelations;
 import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepositoryImpl;
@@ -36,6 +37,7 @@ import com.onebyte.life4cut.support.fileUpload.FileUploader;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -398,6 +400,8 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -430,7 +434,7 @@ public class PictureServiceIntTest {
       PictureTagRelation relationToDelete =
           pictureTagRelationFixtureFactory.save(
               (entity, builder) -> {
-                builder.set("pictureId", picture.getId());
+                builder.set("picture", picture);
                 builder.set("albumId", album.getId());
                 builder.set("tagId", pictureTag1.getId());
                 builder.setNull("deletedAt");
@@ -438,7 +442,7 @@ public class PictureServiceIntTest {
       PictureTagRelation relationToRestore =
           pictureTagRelationFixtureFactory.save(
               (entity, builder) -> {
-                builder.set("pictureId", picture.getId());
+                builder.set("picture", picture);
                 builder.set("albumId", album.getId());
                 builder.set("tagId", pictureTag2.getId());
                 builder.set("deletedAt", LocalDateTime.now());
@@ -475,7 +479,7 @@ public class PictureServiceIntTest {
           .getResultList()
           .forEach(
               relation -> {
-                assertThat(relation.getPictureId()).isEqualTo(pictureId);
+                assertThat(relation.getPicture().getId()).isEqualTo(pictureId);
                 if (relation.getId().equals(relationToDelete.getId())) {
                   assertThat(relation.getDeletedAt()).isNotNull();
                 } else if (relation.getId().equals(relationToRestore.getId())) {
@@ -546,18 +550,24 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       Picture picture2 =
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       Picture picture3 =
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 

@@ -35,7 +35,7 @@ public class PictureTagRelationRepositoryImpl implements PictureTagRelationRepos
   public PictureTagRelations findByPictureId(Long pictureId) {
     return new PictureTagRelations(
         em.createQuery(
-                "SELECT ptr FROM PictureTagRelation ptr WHERE ptr.pictureId = :pictureId",
+                "SELECT ptr FROM PictureTagRelation ptr WHERE ptr.picture.id = :pictureId",
                 PictureTagRelation.class)
             .setParameter("pictureId", pictureId)
             .getResultList());

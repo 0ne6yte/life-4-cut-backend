@@ -1,12 +1,21 @@
 package com.onebyte.life4cut.picture.domain;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class PictureTagRelations {
 
-  private final List<PictureTagRelation> relations;
+  @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<PictureTagRelation> relations = new ArrayList<>();
 
   public PictureTagRelations(@Nonnull List<PictureTagRelation> relations) {
     this.relations = relations;

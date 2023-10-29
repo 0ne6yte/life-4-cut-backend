@@ -55,7 +55,7 @@ public class PictureRepositoryImpl implements PictureRepository {
                 stringTemplate("GROUP_CONCAT({0})", pictureTag.name).as("tags")))
         .from(picture)
         .leftJoin(pictureTagRelation)
-        .on(picture.id.eq(pictureTagRelation.pictureId), pictureTagRelation.deletedAt.isNull())
+        .on(picture.id.eq(pictureTagRelation.picture.id), pictureTagRelation.deletedAt.isNull())
         .leftJoin(pictureTag)
         .on(pictureTagRelation.tagId.eq(pictureTag.id), pictureTag.deletedAt.isNull())
         .where(picture.id.in(pictureIds), picture.deletedAt.isNull())
