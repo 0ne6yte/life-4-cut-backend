@@ -14,7 +14,7 @@ import com.onebyte.life4cut.picture.repository.PictureRepository;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
-import com.onebyte.life4cut.pictureTag.domain.PictureTags;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import com.onebyte.life4cut.pictureTag.repository.PictureTagRepository;
 import com.onebyte.life4cut.slot.domain.Slot;
 import com.onebyte.life4cut.slot.exception.SlotNotFoundException;

@@ -22,7 +22,7 @@ import com.onebyte.life4cut.fixture.SlotFixtureFactory;
 import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
-import com.onebyte.life4cut.picture.domain.PictureTagRelations;
+import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepositoryImpl;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;

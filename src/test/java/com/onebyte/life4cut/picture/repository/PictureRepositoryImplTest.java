@@ -7,7 +7,7 @@ import com.onebyte.life4cut.fixture.PictureFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagRelationFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
-import com.onebyte.life4cut.picture.domain.PictureTagRelations;
+import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;

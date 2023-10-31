@@ -4,7 +4,7 @@ import static com.onebyte.life4cut.pictureTag.domain.QPictureTag.pictureTag;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
-import com.onebyte.life4cut.pictureTag.domain.PictureTags;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nonnull;

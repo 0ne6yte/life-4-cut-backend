@@ -1,6 +1,8 @@
-package com.onebyte.life4cut.picture.domain;
+package com.onebyte.life4cut.picture.domain.vo;
 
-import com.onebyte.life4cut.pictureTag.domain.PictureTags;
+import com.onebyte.life4cut.picture.domain.Picture;
+import com.onebyte.life4cut.picture.domain.PictureTagRelation;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;

@@ -1,7 +1,7 @@
 package com.onebyte.life4cut.pictureTag.repository;
 
 import com.onebyte.life4cut.pictureTag.domain.PictureTag;
-import com.onebyte.life4cut.pictureTag.domain.PictureTags;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import java.util.List;
 
 public interface PictureTagRepository {
