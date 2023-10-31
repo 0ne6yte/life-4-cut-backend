@@ -91,7 +91,6 @@ public class PictureServiceIntTest {
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = 1L;
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -124,7 +123,6 @@ public class PictureServiceIntTest {
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -156,7 +154,6 @@ public class PictureServiceIntTest {
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -193,7 +190,6 @@ public class PictureServiceIntTest {
       Long authorId = 1L;
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -239,7 +235,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -285,7 +280,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -333,7 +327,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = "updateContent";
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -379,7 +372,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = LocalDateTime.of(2023, 10, 3, 0, 0, 0);
@@ -453,7 +445,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = List.of(pictureTag2.getName().getValue(), "newTag");
       LocalDateTime picturedAt = null;
