@@ -1,8 +1,8 @@
 package com.onebyte.life4cut.picture.repository;
 
 import static com.onebyte.life4cut.picture.domain.QPicture.picture;
-import static com.onebyte.life4cut.picture.domain.QPictureTag.pictureTag;
 import static com.onebyte.life4cut.picture.domain.QPictureTagRelation.pictureTagRelation;
+import static com.onebyte.life4cut.pictureTag.domain.QPictureTag.pictureTag;
 import static com.querydsl.core.types.dsl.Expressions.stringTemplate;
 
 import com.onebyte.life4cut.picture.domain.Picture;
@@ -55,7 +55,7 @@ public class PictureRepositoryImpl implements PictureRepository {
                 stringTemplate("GROUP_CONCAT({0})", pictureTag.name).as("tags")))
         .from(picture)
         .leftJoin(pictureTagRelation)
-        .on(picture.id.eq(pictureTagRelation.pictureId), pictureTagRelation.deletedAt.isNull())
+        .on(picture.id.eq(pictureTagRelation.picture.id))
         .leftJoin(pictureTag)
         .on(pictureTagRelation.tagId.eq(pictureTag.id), pictureTag.deletedAt.isNull())
         .where(picture.id.in(pictureIds), picture.deletedAt.isNull())

@@ -195,8 +195,8 @@ sonarqube {
     properties {
         property("sonar.projectName", "life-4-cut-backend")
         property("sonar.projectKey", "0ne6yte_life-4-cut-backend")
-        property("sonar.sources", "src/main")
-        property("sonar.tests", "src/test")
+        property("sonar.sources", "src/main/")
+        property("sonar.tests", "src/test/")
         property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/*.xml")
     }
 }

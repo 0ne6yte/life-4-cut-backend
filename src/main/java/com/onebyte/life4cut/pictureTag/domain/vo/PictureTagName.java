@@ -1,4 +1,4 @@
-package com.onebyte.life4cut.picture.domain.vo;
+package com.onebyte.life4cut.pictureTag.domain.vo;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -31,5 +31,9 @@ public class PictureTagName {
     }
 
     return new PictureTagName(value.trim());
+  }
+
+  public boolean is(String name) {
+    return this.value.equals(name);
   }
 }

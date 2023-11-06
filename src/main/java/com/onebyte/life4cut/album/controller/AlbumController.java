@@ -9,13 +9,12 @@ import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.auth.dto.CustomUserDetails;
 import com.onebyte.life4cut.common.web.ApiResponse;
 import com.onebyte.life4cut.common.web.EmptyResponse;
-import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.service.PictureService;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.service.PictureTagService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -77,7 +76,6 @@ public class AlbumController {
         userDetails.getUserId(),
         albumId,
         pictureId,
-        LocalDateTime.now(),
         request.getContent(),
         request.tags(),
         request.getPicturedAt(),

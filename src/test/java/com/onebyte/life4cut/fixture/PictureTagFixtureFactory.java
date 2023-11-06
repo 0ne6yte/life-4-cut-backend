@@ -1,7 +1,7 @@
 package com.onebyte.life4cut.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
-import com.onebyte.life4cut.picture.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import jakarta.persistence.EntityManager;
 import java.util.function.BiConsumer;
 import org.springframework.beans.factory.annotation.Autowired;

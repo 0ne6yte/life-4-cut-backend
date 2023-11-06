@@ -1,7 +1,7 @@
-package com.onebyte.life4cut.picture.domain;
+package com.onebyte.life4cut.pictureTag.domain;
 
 import com.onebyte.life4cut.common.entity.BaseEntity;
-import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -53,6 +53,10 @@ public class PictureTag extends BaseEntity {
     if (isDeleted()) {
       restore();
     }
+  }
+
+  public boolean isNameEqualsTo(@Nonnull String name) {
+    return this.name.is(name);
   }
 
   private boolean isDeleted() {

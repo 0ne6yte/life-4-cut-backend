@@ -1,9 +1,12 @@
 package com.onebyte.life4cut.picture.domain;
 
 import com.onebyte.life4cut.common.entity.BaseEntity;
+import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -46,19 +49,23 @@ public class Picture extends BaseEntity {
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
 
+  @Nonnull @Embedded private PictureTagRelations pictureTagRelations;
+
   @Nonnull
   public static Picture create(
       @Nonnull Long userId,
       @Nonnull Long albumId,
       @Nonnull String path,
       @Nonnull String content,
-      @Nonnull LocalDateTime picturedAt) {
+      @Nonnull LocalDateTime picturedAt,
+      @Nonnull PictureTags pictureTags) {
     Picture picture = new Picture();
     picture.userId = userId;
     picture.albumId = albumId;
     picture.path = path;
     picture.content = content.trim();
     picture.picturedAt = picturedAt;
+    picture.pictureTagRelations = PictureTagRelations.of(picture, pictureTags);
     return picture;
   }
 
@@ -77,5 +84,9 @@ public class Picture extends BaseEntity {
     if (path != null) {
       this.path = path;
     }
+  }
+
+  public void updateTags(@Nonnull PictureTags pictureTags) {
+    this.pictureTagRelations = this.pictureTagRelations.update(this, pictureTags);
   }
 }

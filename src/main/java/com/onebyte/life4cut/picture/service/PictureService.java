@@ -9,13 +9,12 @@ import com.onebyte.life4cut.album.repository.AlbumRepository;
 import com.onebyte.life4cut.album.repository.UserAlbumRepository;
 import com.onebyte.life4cut.common.constants.S3Env;
 import com.onebyte.life4cut.picture.domain.Picture;
-import com.onebyte.life4cut.picture.domain.PictureTag;
-import com.onebyte.life4cut.picture.domain.PictureTagRelation;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import com.onebyte.life4cut.pictureTag.repository.PictureTagRepository;
 import com.onebyte.life4cut.slot.domain.Slot;
 import com.onebyte.life4cut.slot.exception.SlotNotFoundException;
@@ -30,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +43,6 @@ public class PictureService {
   private final AlbumRepository albumRepository;
   private final UserAlbumRepository userAlbumRepository;
   private final PictureTagRepository pictureTagRepository;
-  private final PictureTagRelationRepository pictureTagRelationRepository;
   private final PictureRepository pictureRepository;
   private final FileUploader fileUploader;
   private final S3Env s3Env;
@@ -72,34 +69,30 @@ public class PictureService {
       throw new AlbumDoesNotHaveSlotException();
     }
 
-    List<PictureTag> pictureTags = pictureTagRepository.findByNames(albumId, tags);
+    PictureTags existingPictureTags = pictureTagRepository.findByNames(albumId, tags);
     List<PictureTag> newPictureTags =
         tags.stream()
-            .filter(
-                tag ->
-                    pictureTags.stream()
-                        .noneMatch(pictureTag -> pictureTag.getName().getValue().equals(tag)))
+            .filter(tag -> !existingPictureTags.has(tag))
             .map(tag -> PictureTag.create(albumId, authorId, tag))
             .toList();
 
     FileUploadResponse response =
         fileUploader.upload(MultipartFileUploadRequest.of(image, s3Env.bucket()));
 
-    Picture picture = Picture.create(authorId, albumId, response.key(), content, picturedAt);
+    pictureTagRepository.saveAll(newPictureTags);
+    existingPictureTags.getTags().forEach(PictureTag::restoreIfRequired);
+
+    Picture picture =
+        Picture.create(
+            authorId,
+            albumId,
+            response.key(),
+            content,
+            picturedAt,
+            existingPictureTags.addAll(newPictureTags));
 
     pictureRepository.save(picture);
     slot.addPicture(picture.getId());
-
-    pictureTagRepository.saveAll(newPictureTags);
-    pictureTags.forEach(PictureTag::restoreIfRequired);
-
-    List<PictureTagRelation> newPictureTagRelations =
-        Stream.concat(pictureTags.stream(), newPictureTags.stream())
-            .map(
-                pictureTag ->
-                    PictureTagRelation.create(picture.getId(), albumId, pictureTag.getId()))
-            .toList();
-    pictureTagRelationRepository.saveAll(newPictureTagRelations);
 
     return picture.getId();
   }
@@ -108,7 +101,6 @@ public class PictureService {
       @Nonnull final Long authorId,
       @Nonnull final Long albumId,
       @Nonnull final Long pictureId,
-      @Nonnull final LocalDateTime now,
       @Nullable final String content,
       @Nullable final List<String> tags,
       @Nullable final LocalDateTime picturedAt,
@@ -134,61 +126,17 @@ public class PictureService {
     picture.updateIfRequired(content, picturedAt, key);
 
     if (tags != null) {
-      List<PictureTag> pictureTags = pictureTagRepository.findByNames(albumId, tags);
+      PictureTags existingPictureTags = pictureTagRepository.findByNames(albumId, tags);
       List<PictureTag> newPictureTags =
           tags.stream()
-              .filter(
-                  tag ->
-                      pictureTags.stream()
-                          .noneMatch(pictureTag -> pictureTag.getName().getValue().equals(tag)))
+              .filter(tag -> !existingPictureTags.has(tag))
               .map(tag -> PictureTag.create(albumId, authorId, tag))
               .toList();
 
       pictureTagRepository.saveAll(newPictureTags);
-      pictureTags.forEach(PictureTag::restoreIfRequired);
+      existingPictureTags.getTags().forEach(PictureTag::restoreIfRequired);
 
-      List<PictureTagRelation> pictureTagRelations =
-          pictureTagRelationRepository.findByPictureId(pictureId);
-
-      List<PictureTagRelation> newPictureTagRelations =
-          Stream.concat(pictureTags.stream(), newPictureTags.stream())
-              .filter(
-                  pictureTag ->
-                      pictureTagRelations.stream()
-                          .noneMatch(
-                              pictureTagRelation ->
-                                  pictureTagRelation.getTagId().equals(pictureTag.getId())))
-              .map(
-                  pictureTag ->
-                      PictureTagRelation.create(
-                          picture.getId(), picture.getAlbumId(), pictureTag.getId()))
-              .toList();
-
-      List<PictureTagRelation> pictureTagRelationsToRestoreIfRequired =
-          pictureTagRelations.stream()
-              .filter(
-                  pictureTagRelation ->
-                      pictureTags.stream()
-                          .anyMatch(
-                              pictureTag ->
-                                  pictureTagRelation.getTagId().equals(pictureTag.getId())))
-              .toList();
-
-      List<PictureTagRelation> pictureTagRelationsToDelete =
-          pictureTagRelations.stream()
-              .filter(
-                  pictureTagRelation ->
-                      pictureTagRelationsToRestoreIfRequired.stream()
-                          .noneMatch(
-                              newPictureTagRelation ->
-                                  pictureTagRelation
-                                      .getTagId()
-                                      .equals(newPictureTagRelation.getTagId())))
-              .toList();
-
-      pictureTagRelationRepository.saveAll(newPictureTagRelations);
-      pictureTagRelationsToRestoreIfRequired.forEach(PictureTagRelation::restoreIfRequired);
-      pictureTagRelationsToDelete.forEach(pictureTagRelation -> pictureTagRelation.delete(now));
+      picture.updateTags(existingPictureTags.addAll(newPictureTags));
     }
   }
 

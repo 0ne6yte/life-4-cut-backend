@@ -21,13 +21,13 @@ import com.onebyte.life4cut.fixture.PictureTagRelationFixtureFactory;
 import com.onebyte.life4cut.fixture.SlotFixtureFactory;
 import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
-import com.onebyte.life4cut.picture.domain.PictureTag;
 import com.onebyte.life4cut.picture.domain.PictureTagRelation;
-import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
+import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
 import com.onebyte.life4cut.picture.exception.PictureNotFoundException;
 import com.onebyte.life4cut.picture.repository.PictureRepositoryImpl;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepositoryImpl;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
 import com.onebyte.life4cut.pictureTag.repository.PictureTagRepositoryImpl;
 import com.onebyte.life4cut.slot.domain.Slot;
 import com.onebyte.life4cut.slot.repository.SlotRepositoryImpl;
@@ -36,6 +36,7 @@ import com.onebyte.life4cut.support.fileUpload.FileUploader;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -75,7 +76,6 @@ public class PictureServiceIntTest {
             new AlbumRepositoryImpl(query),
             new UserAlbumRepositoryImpl(query),
             new PictureTagRepositoryImpl(entityManager, query),
-            new PictureTagRelationRepositoryImpl(entityManager),
             pictureRepository,
             fileUploader,
             s3Env);
@@ -91,7 +91,6 @@ public class PictureServiceIntTest {
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = 1L;
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -102,7 +101,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
 
       // then
       assertThat(throwable).isInstanceOf(PictureNotFoundException.class);
@@ -116,13 +115,14 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 2L);
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -133,7 +133,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(PictureNotFoundException.class);
     }
@@ -146,13 +146,14 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 1L);
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
       Long authorId = 1L;
       Long albumId = 1L;
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -163,7 +164,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(AlbumNotFoundException.class);
     }
@@ -181,13 +182,14 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
       Long authorId = 1L;
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -198,7 +200,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
 
       // then
       assertThat(throwable).isInstanceOf(UserAlbumRolePermissionException.class);
@@ -217,6 +219,8 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -231,7 +235,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -242,7 +245,7 @@ public class PictureServiceIntTest {
           catchThrowable(
               () ->
                   pictureService.updatePicture(
-                      authorId, albumId, pictureId, now, content, tags, picturedAt, image));
+                      authorId, albumId, pictureId, content, tags, picturedAt, image));
       // then
       assertThat(throwable).isInstanceOf(UserAlbumRolePermissionException.class);
     }
@@ -261,6 +264,8 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
                 builder.set("path", "originKey");
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -275,7 +280,6 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = null;
@@ -285,8 +289,7 @@ public class PictureServiceIntTest {
       when(fileUploader.upload(Mockito.any())).thenReturn(new FileUploadResponse("key"));
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -308,6 +311,8 @@ public class PictureServiceIntTest {
                 builder.set("albumId", album.getId());
                 builder.set("content", "originContent");
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -322,15 +327,13 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = "updateContent";
       List<String> tags = null;
       LocalDateTime picturedAt = null;
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -353,6 +356,8 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       UserAlbum useralbum =
@@ -367,15 +372,13 @@ public class PictureServiceIntTest {
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = null;
       LocalDateTime picturedAt = LocalDateTime.of(2023, 10, 3, 0, 0, 0);
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = pictureRepository.findById(pictureId).get();
@@ -393,13 +396,7 @@ public class PictureServiceIntTest {
               (entity, builder) -> {
                 builder.setNull("deletedAt");
               });
-      Picture picture =
-          pictureFixtureFactory.save(
-              (entity, builder) -> {
-                builder.set("albumId", album.getId());
-                builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
-                builder.setNull("deletedAt");
-              });
+
       UserAlbum useralbum =
           userAlbumFixtureFactory.save(
               (entity, builder) -> {
@@ -427,35 +424,34 @@ public class PictureServiceIntTest {
                 builder.setNull("deletedAt");
               });
 
-      PictureTagRelation relationToDelete =
-          pictureTagRelationFixtureFactory.save(
+      Picture picture =
+          pictureFixtureFactory.save(
               (entity, builder) -> {
-                builder.set("pictureId", picture.getId());
+                builder.setNull("id");
                 builder.set("albumId", album.getId());
-                builder.set("tagId", pictureTag1.getId());
+                builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
-      PictureTagRelation relationToRestore =
-          pictureTagRelationFixtureFactory.save(
-              (entity, builder) -> {
-                builder.set("pictureId", picture.getId());
-                builder.set("albumId", album.getId());
-                builder.set("tagId", pictureTag2.getId());
-                builder.set("deletedAt", LocalDateTime.now());
-              });
+
+      pictureTagRelationFixtureFactory.save(
+          (entity, builder) -> {
+            builder.set("picture", picture);
+            builder.set("albumId", album.getId());
+            builder.set("tagId", pictureTag1.getId());
+          });
 
       Long authorId = useralbum.getUserId();
       Long albumId = album.getId();
       Long pictureId = picture.getId();
-      LocalDateTime now = LocalDateTime.now();
       String content = null;
       List<String> tags = List.of(pictureTag2.getName().getValue(), "newTag");
       LocalDateTime picturedAt = null;
       MultipartFile image = null;
 
       // when
-      pictureService.updatePicture(
-          authorId, albumId, pictureId, now, content, tags, picturedAt, image);
+      pictureService.updatePicture(authorId, albumId, pictureId, content, tags, picturedAt, image);
 
       // then
       Picture savedPicture = entityManager.find(Picture.class, pictureId);
@@ -475,14 +471,7 @@ public class PictureServiceIntTest {
           .getResultList()
           .forEach(
               relation -> {
-                assertThat(relation.getPictureId()).isEqualTo(pictureId);
-                if (relation.getId().equals(relationToDelete.getId())) {
-                  assertThat(relation.getDeletedAt()).isNotNull();
-                } else if (relation.getId().equals(relationToRestore.getId())) {
-                  assertThat(relation.getDeletedAt()).isNull();
-                } else {
-                  assertThat(relation.getDeletedAt()).isNull();
-                }
+                assertThat(relation.getPicture().getId()).isEqualTo(pictureId);
               });
     }
   }
@@ -546,18 +535,24 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       Picture picture2 =
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
       Picture picture3 =
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 

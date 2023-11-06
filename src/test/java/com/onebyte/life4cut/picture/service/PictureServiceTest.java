@@ -20,11 +20,10 @@ import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.fixture.SlotFixtureFactory;
 import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
-import com.onebyte.life4cut.picture.domain.PictureTag;
-import com.onebyte.life4cut.picture.domain.PictureTagRelation;
-import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
 import com.onebyte.life4cut.picture.repository.PictureRepository;
-import com.onebyte.life4cut.picture.repository.PictureTagRelationRepository;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import com.onebyte.life4cut.pictureTag.repository.PictureTagRepository;
 import com.onebyte.life4cut.slot.domain.Slot;
 import com.onebyte.life4cut.slot.exception.SlotNotFoundException;
@@ -50,8 +49,6 @@ class PictureServiceTest {
   private final SlotRepository slotRepository = mock(SlotRepository.class);
   private final UserAlbumRepository userAlbumRepository = mock(UserAlbumRepository.class);
   private final PictureTagRepository pictureTagRepository = mock(PictureTagRepository.class);
-  private final PictureTagRelationRepository pictureTagRelationRepository =
-      mock(PictureTagRelationRepository.class);
   private final PictureRepository pictureRepository = mock(PictureRepository.class);
   private final FileUploader fileUploader = mock(FileUploader.class);
   private final S3Env s3Env = new S3Env("test");
@@ -61,7 +58,6 @@ class PictureServiceTest {
           albumRepository,
           userAlbumRepository,
           pictureTagRepository,
-          pictureTagRelationRepository,
           pictureRepository,
           fileUploader,
           s3Env);
@@ -350,10 +346,11 @@ class PictureServiceTest {
                 builder.set("deletedAt", LocalDateTime.now());
               });
       when(pictureTagRepository.findByNames(albumId, tags))
-          .thenReturn(List.of(existPictureTag, deletedPictureTag));
+          .thenReturn(new PictureTags(List.of(existPictureTag, deletedPictureTag)));
 
       when(fileUploader.upload(any())).thenReturn(new FileUploadResponse("test"));
 
+      ArgumentCaptor<Picture> newPictureCapture = ArgumentCaptor.forClass(Picture.class);
       when(pictureRepository.save(any()))
           .thenAnswer(
               invocation -> {
@@ -373,18 +370,6 @@ class PictureServiceTest {
                 return pictureTags;
               });
 
-      ArgumentCaptor<List<PictureTagRelation>> newPictureTagRelationsCapture =
-          ArgumentCaptor.forClass(List.class);
-      when(pictureTagRelationRepository.saveAll(anyCollection()))
-          .thenAnswer(
-              invocation -> {
-                List<PictureTagRelation> pictureTagRelations = invocation.getArgument(0);
-                for (int i = 0; i < pictureTagRelations.size(); i++) {
-                  ReflectionTestUtils.setField(pictureTagRelations.get(i), "id", i + 100L);
-                }
-                return pictureTagRelations;
-              });
-
       // when
       Long pictureId =
           pictureService.createInSlot(authorId, albumId, slotId, content, picturedAt, tags, image);
@@ -398,20 +383,16 @@ class PictureServiceTest {
       assertThat(newPictureTags).hasSize(1);
       assertThat(newPictureTags.get(0).getName().getValue()).isEqualTo(tags.get(1));
 
-      verify(pictureTagRelationRepository).saveAll(newPictureTagRelationsCapture.capture());
-      List<PictureTagRelation> newPictureTagRelations = newPictureTagRelationsCapture.getValue();
-      assertThat(newPictureTagRelations).hasSize(3);
-      assertThat(newPictureTagRelations.get(0).getTagId()).isEqualTo(1L);
-      assertThat(newPictureTagRelations.get(0).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(0).getPictureId()).isEqualTo(1L);
-      assertThat(newPictureTagRelations.get(1).getTagId()).isEqualTo(2L);
-      assertThat(newPictureTagRelations.get(1).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(1).getPictureId()).isEqualTo(1L);
-      assertThat(newPictureTagRelations.get(2).getTagId()).isEqualTo(10L);
-      assertThat(newPictureTagRelations.get(2).getAlbumId()).isEqualTo(albumId);
-      assertThat(newPictureTagRelations.get(2).getPictureId()).isEqualTo(1L);
-
       assertThat(deletedPictureTag.getDeletedAt()).isNull();
+
+      verify(pictureRepository).save(newPictureCapture.capture());
+      Picture newPicture = newPictureCapture.getValue();
+      assertThat(newPicture.getAlbumId()).isEqualTo(albumId);
+      assertThat(newPicture.getUserId()).isEqualTo(authorId);
+      assertThat(newPicture.getPath()).isEqualTo("test");
+      assertThat(newPicture.getContent()).isEqualTo(content);
+      assertThat(newPicture.getPicturedAt()).isEqualTo(picturedAt);
+      assertThat(newPicture.getPictureTagRelations().getRelations()).hasSize(3);
     }
   }
 }

@@ -10,7 +10,7 @@ import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.exception.UserAlbumRolePermissionException;
 import com.onebyte.life4cut.album.repository.UserAlbumRepository;
 import com.onebyte.life4cut.fixture.UserAlbumFixtureFactory;
-import com.onebyte.life4cut.picture.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
 import com.onebyte.life4cut.pictureTag.repository.PictureTagRepository;
 import java.util.List;
 import java.util.Optional;

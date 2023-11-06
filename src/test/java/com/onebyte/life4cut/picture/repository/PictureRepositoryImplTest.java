@@ -7,10 +7,12 @@ import com.onebyte.life4cut.fixture.PictureFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagRelationFixtureFactory;
 import com.onebyte.life4cut.picture.domain.Picture;
-import com.onebyte.life4cut.picture.domain.PictureTag;
-import com.onebyte.life4cut.picture.domain.vo.PictureTagName;
+import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
+import com.onebyte.life4cut.pictureTag.domain.PictureTag;
+import com.onebyte.life4cut.pictureTag.domain.vo.PictureTagName;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +38,8 @@ class PictureRepositoryImplTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.setNull("deletedAt");
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
               });
 
       // when
@@ -65,6 +69,8 @@ class PictureRepositoryImplTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("deletedAt", LocalDateTime.now());
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
               });
 
       // when
@@ -94,6 +100,8 @@ class PictureRepositoryImplTest {
                 builder.set("content", content);
                 builder.set("path", path);
                 builder.set("picturedAt", picturedAt);
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
               });
 
@@ -115,7 +123,7 @@ class PictureRepositoryImplTest {
 
       pictureTagRelationFixtureFactory.save(
           (entity, builder) -> {
-            builder.set("pictureId", picture.getId());
+            builder.set("picture", picture);
             builder.set("albumId", albumId);
             builder.set("tagId", tag1.getId());
             builder.setNull("deletedAt");
@@ -123,7 +131,7 @@ class PictureRepositoryImplTest {
 
       pictureTagRelationFixtureFactory.save(
           (entity, builder) -> {
-            builder.set("pictureId", picture.getId());
+            builder.set("picture", picture);
             builder.set("albumId", albumId);
             builder.set("tagId", tag2.getId());
             builder.setNull("deletedAt");
@@ -161,6 +169,8 @@ class PictureRepositoryImplTest {
                 builder.set("path", path);
                 builder.set("picturedAt", picturedAt);
                 builder.setNull("deletedAt");
+                builder.set(
+                    "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
               });
 
       PictureTag tag1 =
@@ -181,7 +191,7 @@ class PictureRepositoryImplTest {
 
       pictureTagRelationFixtureFactory.save(
           (entity, builder) -> {
-            builder.set("pictureId", picture.getId());
+            builder.set("picture", picture);
             builder.set("albumId", albumId);
             builder.set("tagId", tag1.getId());
             builder.setNull("deletedAt");
@@ -189,7 +199,7 @@ class PictureRepositoryImplTest {
 
       pictureTagRelationFixtureFactory.save(
           (entity, builder) -> {
-            builder.set("pictureId", picture.getId());
+            builder.set("picture", picture);
             builder.set("albumId", albumId);
             builder.set("tagId", tag2.getId());
             builder.setNull("deletedAt");
