@@ -24,6 +24,8 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.SimpleType;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
+import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
+import com.onebyte.life4cut.album.service.AlbumService;
 import com.onebyte.life4cut.common.annotation.WithCustomMockUser;
 import com.onebyte.life4cut.common.controller.ControllerTest;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
@@ -61,6 +63,8 @@ class AlbumControllerTest extends ControllerTest {
   @MockBean private PictureService pictureService;
 
   @MockBean private PictureTagService pictureTagService;
+
+  @MockBean private AlbumService albumService;
 
   private PictureTagFixtureFactory pictureTagFixtureFactory = new PictureTagFixtureFactory();
 
@@ -268,6 +272,7 @@ class AlbumControllerTest extends ControllerTest {
   @Nested
   @WithCustomMockUser
   class GetPicturesInSlot {
+
     @Test
     @DisplayName("앨범내 사진을 페이지단위로 조회한다")
     void getPicturesInSlot() throws Exception {
@@ -342,6 +347,45 @@ class AlbumControllerTest extends ControllerTest {
                                   .description("사진 태그 목록")
                                   .attributes(
                                       Attributes.key("itemType").value(JsonFieldType.STRING)))
+                          .build())));
+    }
+  }
+
+  @Nested
+  @WithCustomMockUser
+  class GetMyRoleInAlbum {
+
+    @Test
+    @DisplayName("앨범에 대한 내 권한을 조회한다")
+    void getMyRoleInAlbum() throws Exception {
+      // given
+      Long albumId = 1L;
+
+      when(albumService.getRoleInAlbum(any(), any())).thenReturn(UserAlbumRole.HOST);
+
+      // when
+      ResultActions result = mockMvc.perform(get("/api/v1/albums/{albumId}/roles/me", albumId));
+
+      // then
+      result
+          .andExpect(status().isOk())
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  preprocessRequest(prettyPrint()),
+                  preprocessResponse(prettyPrint()),
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범에 대한 내 권한을 조회한다")
+                          .summary("앨범에 대한 내 권한을 조회한다")
+                          .pathParameters(
+                              parameterWithName("albumId")
+                                  .description("앨범 아이디")
+                                  .type(SimpleType.NUMBER))
+                          .responseFields(
+                              fieldWithPath("message").type(STRING).description("응답 메시지"),
+                              fieldWithPath("data.role").type(STRING).description("앨범에 대한 내 권한"))
                           .build())));
     }
   }
