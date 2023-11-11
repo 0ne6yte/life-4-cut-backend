@@ -8,7 +8,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class ImagePath {
 
-  private String value;
+  @Nonnull private String value;
 
   private ImagePath() {}
 

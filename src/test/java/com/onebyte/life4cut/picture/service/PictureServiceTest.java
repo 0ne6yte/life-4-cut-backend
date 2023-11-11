@@ -15,6 +15,7 @@ import com.onebyte.life4cut.album.exception.UserAlbumRolePermissionException;
 import com.onebyte.life4cut.album.repository.AlbumRepository;
 import com.onebyte.life4cut.album.repository.UserAlbumRepository;
 import com.onebyte.life4cut.common.constants.S3Env;
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.fixture.AlbumFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.fixture.SlotFixtureFactory;
@@ -389,7 +390,7 @@ class PictureServiceTest {
       Picture newPicture = newPictureCapture.getValue();
       assertThat(newPicture.getAlbumId()).isEqualTo(albumId);
       assertThat(newPicture.getUserId()).isEqualTo(authorId);
-      assertThat(newPicture.getPath()).isEqualTo("test");
+      assertThat(newPicture.getPath()).isEqualTo(ImagePath.of("test"));
       assertThat(newPicture.getContent()).isEqualTo(content);
       assertThat(newPicture.getPicturedAt()).isEqualTo(picturedAt);
       assertThat(newPicture.getPictureTagRelations().getRelations()).hasSize(3);

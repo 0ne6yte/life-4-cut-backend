@@ -29,6 +29,7 @@ import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.service.AlbumService;
 import com.onebyte.life4cut.common.annotation.WithCustomMockUser;
 import com.onebyte.life4cut.common.controller.ControllerTest;
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.PictureService;
@@ -297,7 +298,7 @@ class AlbumControllerTest extends ControllerTest {
                           new PictureDetailResult(
                               1L,
                               "content",
-                              "path",
+                              ImagePath.of("path"),
                               LocalDateTime.of(2023, 10, 15, 0, 14, 15),
                               "tag1,tag2")))));
 
@@ -308,6 +309,16 @@ class AlbumControllerTest extends ControllerTest {
       result
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.message").value("OK"))
+          .andExpect(jsonPath("$.data.pictures[0][0].pictureId").value(1))
+          .andExpect(
+              jsonPath("$.data.pictures[0][0].path")
+                  .value("https://test-bucket.s3.ap-northeast-2.amazonaws.com/path"))
+          .andExpect(jsonPath("$.data.pictures[0][0].content").value("content"))
+          .andExpect(jsonPath("$.data.pictures[0][0].layout").value("FAT_HORIZONTAL"))
+          .andExpect(jsonPath("$.data.pictures[0][0].location").value("LEFT"))
+          .andExpect(jsonPath("$.data.pictures[0][0].picturedAt").value("2023-10-15T00:14:15"))
+          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[0]").value("tag1"))
+          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[1]").value("tag2"))
           .andDo(
               document(
                   "{class_name}/{method_name}",

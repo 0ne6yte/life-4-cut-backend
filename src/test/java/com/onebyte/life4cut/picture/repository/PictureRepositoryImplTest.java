@@ -3,6 +3,7 @@ package com.onebyte.life4cut.picture.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.onebyte.life4cut.common.annotation.RepositoryTest;
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.fixture.PictureFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureTagRelationFixtureFactory;
@@ -38,6 +39,7 @@ class PictureRepositoryImplTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.setNull("deletedAt");
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
               });
@@ -89,7 +91,7 @@ class PictureRepositoryImplTest {
     void findDetailByIds() {
       // given
       String content = "사진 내용";
-      String path = "/result/1/2/3";
+      ImagePath path = ImagePath.of("/result/1/2/3");
       LocalDateTime picturedAt = LocalDateTime.of(2023, 10, 14, 0, 0, 0);
       Long albumId = 1L;
 
@@ -157,7 +159,7 @@ class PictureRepositoryImplTest {
     void findDetailByIdsWithDeleteTag() {
       // given
       String content = "사진 내용";
-      String path = "/result/1/2/3";
+      ImagePath path = ImagePath.of("/result/1/2/3");
       LocalDateTime picturedAt = LocalDateTime.of(2023, 10, 14, 0, 0, 0);
       Long albumId = 1L;
 

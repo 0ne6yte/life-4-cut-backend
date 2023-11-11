@@ -13,6 +13,7 @@ import com.onebyte.life4cut.album.exception.UserAlbumRolePermissionException;
 import com.onebyte.life4cut.album.repository.AlbumRepositoryImpl;
 import com.onebyte.life4cut.album.repository.UserAlbumRepositoryImpl;
 import com.onebyte.life4cut.common.constants.S3Env;
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.config.JpaConfiguration;
 import com.onebyte.life4cut.fixture.AlbumFixtureFactory;
 import com.onebyte.life4cut.fixture.PictureFixtureFactory;
@@ -219,6 +220,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -263,7 +265,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
-                builder.set("path", "originKey");
+                builder.set("path", ImagePath.of("originPath"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -430,6 +432,7 @@ public class PictureServiceIntTest {
                 builder.setNull("id");
                 builder.set("albumId", album.getId());
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -545,6 +548,7 @@ public class PictureServiceIntTest {
                 builder.set("albumId", album.getId());
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
+                builder.set("path", ImagePath.of("path"));
                 builder.setNull("deletedAt");
               });
       Picture picture3 =

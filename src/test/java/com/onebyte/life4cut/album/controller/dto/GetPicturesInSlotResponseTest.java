@@ -3,6 +3,7 @@ package com.onebyte.life4cut.album.controller.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse.PictureInSlot;
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import com.onebyte.life4cut.slot.domain.vo.SlotLayout;
@@ -35,7 +36,7 @@ class GetPicturesInSlotResponseTest {
                       new PictureDetailResult(
                           1L,
                           "content",
-                          "path",
+                          ImagePath.of("path"),
                           LocalDateTime.of(2023, 10, 14, 11, 52, 0),
                           "tag1,tag2"))),
               new PictureDetailInSlot(
@@ -49,7 +50,7 @@ class GetPicturesInSlotResponseTest {
                       new PictureDetailResult(
                           2L,
                           "content",
-                          "path",
+                          ImagePath.of("path"),
                           LocalDateTime.of(2023, 10, 14, 11, 52, 0),
                           "tag3,tag7"))),
               new PictureDetailInSlot(
@@ -75,7 +76,7 @@ class GetPicturesInSlotResponseTest {
       assertThat(page1.get(0).tagNames()).isEmpty();
 
       assertThat(page1.get(1).pictureId()).isEqualTo(1L);
-      assertThat(page1.get(1).path()).isEqualTo("path");
+      assertThat(page1.get(1).path()).isEqualTo(ImagePath.of("path"));
       assertThat(page1.get(1).content()).isEqualTo("content");
       assertThat(page1.get(1).layout()).isEqualTo("LONG_VERTICAL");
       assertThat(page1.get(1).location()).isEqualTo("RIGHT");
