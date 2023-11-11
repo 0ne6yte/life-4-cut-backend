@@ -1,24 +1,27 @@
 package com.onebyte.life4cut.common.vo;
 
+import jakarta.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class UrlPath {
+public class ImagePath {
 
   private String value;
 
-  private UrlPath() {}
+  private ImagePath() {}
 
-  protected UrlPath(String value) {
+  protected ImagePath(@Nonnull String value) {
     this.value = value;
   }
 
-  public static UrlPath of(String value) {
-    return new UrlPath(value);
+  @Nonnull
+  public static ImagePath of(@Nonnull String value) {
+    return new ImagePath(value);
   }
 
+  @Nonnull
   public String getValue() {
     return value;
   }
