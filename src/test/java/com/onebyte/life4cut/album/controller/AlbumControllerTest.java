@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.epages.restdocs.apispec.Schema;
 import com.epages.restdocs.apispec.SimpleType;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
@@ -119,6 +120,8 @@ class AlbumControllerTest extends ControllerTest {
                           .responseFields(
                               fieldWithPath("message").type(STRING).description("응답 메시지"),
                               fieldWithPath("data.id").type(NUMBER).description("사진 아이디"))
+                          .requestSchema(Schema.schema("CreatePictureRequest"))
+                          .responseSchema(Schema.schema("CreatePictureResponse"))
                           .build()),
                   requestPartFields(
                       "data",
@@ -187,6 +190,7 @@ class AlbumControllerTest extends ControllerTest {
                                   .description("태그 목록"),
                               fieldWithPath("data.tags[].id").type(NUMBER).description("태그 아이디"),
                               fieldWithPath("data.tags[].name").type(STRING).description("태그 이름"))
+                          .responseSchema(Schema.schema("SearchTagResponse"))
                           .build())));
     }
   }
@@ -252,6 +256,8 @@ class AlbumControllerTest extends ControllerTest {
                               parameterWithName("pictureId")
                                   .description("사진 아이디")
                                   .type(SimpleType.NUMBER))
+                          .requestSchema(Schema.schema("UpdatePictureRequest"))
+                          .responseSchema(Schema.schema("EmptyResponse"))
                           .build()),
                   requestPartFields(
                       "data",
@@ -347,6 +353,7 @@ class AlbumControllerTest extends ControllerTest {
                                   .description("사진 태그 목록")
                                   .attributes(
                                       Attributes.key("itemType").value(JsonFieldType.STRING)))
+                          .responseSchema(Schema.schema("GetPictureInSlotResponse"))
                           .build())));
     }
   }
@@ -386,6 +393,7 @@ class AlbumControllerTest extends ControllerTest {
                           .responseFields(
                               fieldWithPath("message").type(STRING).description("응답 메시지"),
                               fieldWithPath("data.role").type(STRING).description("앨범에 대한 내 권한"))
+                          .responseSchema(Schema.schema("GetMyRoleInAlbumResponse"))
                           .build())));
     }
   }
