@@ -116,6 +116,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 2L);
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -147,6 +148,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", 1L);
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -183,6 +185,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");

@@ -1,16 +1,17 @@
 package com.onebyte.life4cut.common.vo;
 
 import jakarta.annotation.Nonnull;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class ImagePath {
 
-  @Nonnull private String value;
-
-  private ImagePath() {}
+  private String value;
 
   protected ImagePath(@Nonnull String value) {
     this.value = value;
