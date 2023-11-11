@@ -314,6 +314,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set("content", "originContent");
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
                 builder.set(
@@ -360,6 +361,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set("picturedAt", LocalDateTime.of(2021, 1, 1, 0, 0));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
@@ -541,6 +543,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");
@@ -549,6 +552,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.set("path", ImagePath.of("path"));
@@ -558,6 +562,7 @@ public class PictureServiceIntTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("albumId", album.getId());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
                 builder.setNull("deletedAt");

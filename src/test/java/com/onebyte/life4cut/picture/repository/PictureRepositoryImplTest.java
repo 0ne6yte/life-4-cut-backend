@@ -71,6 +71,7 @@ class PictureRepositoryImplTest {
           pictureFixtureFactory.save(
               (entity, builder) -> {
                 builder.set("deletedAt", LocalDateTime.now());
+                builder.set("path", ImagePath.of("path"));
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
               });
@@ -100,7 +101,7 @@ class PictureRepositoryImplTest {
               (entity, builder) -> {
                 builder.set("albumId", albumId);
                 builder.set("content", content);
-                builder.set("path", path);
+                builder.set("path", ImagePath.of("path"));
                 builder.set("picturedAt", picturedAt);
                 builder.set(
                     "pictureTagRelations", new PictureTagRelations(Collections.emptyList()));
@@ -168,7 +169,7 @@ class PictureRepositoryImplTest {
               (entity, builder) -> {
                 builder.set("albumId", albumId);
                 builder.set("content", content);
-                builder.set("path", path);
+                builder.set("path", ImagePath.of("path"));
                 builder.set("picturedAt", picturedAt);
                 builder.setNull("deletedAt");
                 builder.set(
