@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.epages.restdocs.apispec.Schema;
 import com.onebyte.life4cut.common.annotation.WithCustomMockUser;
 import com.onebyte.life4cut.common.controller.ControllerTest;
 import com.onebyte.life4cut.common.exception.ErrorCode;
@@ -103,6 +104,7 @@ class UserControllerTest extends ControllerTest {
                             fieldWithPath("data.profilePath")
                                 .type(STRING)
                                 .description("유저 프로필 사진 파일 경로"))
+                        .responseSchema(Schema.schema("UserFindResponse"))
                         .build())))
         .andDo(print());
   }
@@ -137,6 +139,7 @@ class UserControllerTest extends ControllerTest {
                         .responseFields(
                             fieldWithPath("message").type(STRING).description("응답 메시지"),
                             fieldWithPath("data").type(OBJECT).description("데이터"))
+                        .responseSchema(Schema.schema("EmptyResponse"))
                         .build())))
         .andDo(print());
   }
@@ -186,6 +189,7 @@ class UserControllerTest extends ControllerTest {
                             fieldWithPath("data.profilePath")
                                 .type(STRING)
                                 .description("유저 프로필 사진 파일 경로"))
+                        .responseSchema(Schema.schema("UserFindResponse"))
                         .build())))
         .andDo(print());
   }
@@ -237,6 +241,7 @@ class UserControllerTest extends ControllerTest {
                                 .type(BOOLEAN)
                                 .description("유저 ID")
                                 .description("유저 프로필 사진 파일 경로"))
+                        .responseSchema(Schema.schema("UserDuplicateResponse"))
                         .build())))
         .andDo(print());
   }
