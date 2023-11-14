@@ -55,4 +55,20 @@ public class AlbumService {
 
     return albumId;
   }
+
+  public void deleteAlbum(Long albumId, @NonNull Long userId) {
+    albumRepository.findById(albumId).orElseThrow(AlbumNotFoundException::new);
+
+    UserAlbum userAlbum =
+        userAlbumRepository
+            .findByUserIdAndAlbumId(userId, albumId)
+            .orElseThrow(UserAlbumRolePermissionException::new);
+
+    if (userAlbum.getRole() == UserAlbumRole.HOST) {
+      albumRepository.deleteById(albumId);
+      userAlbumRepository.deleteByAlbumId(albumId);
+    } else {
+      userAlbumRepository.delete(userAlbum);
+    }
+  }
 }

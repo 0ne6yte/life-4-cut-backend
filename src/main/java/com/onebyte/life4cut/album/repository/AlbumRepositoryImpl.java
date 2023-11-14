@@ -33,4 +33,14 @@ public class AlbumRepositoryImpl implements AlbumRepository {
     entityManager.persist(album);
     return album;
   }
+
+  @Override
+  public void deleteById(Long id) {
+    Album album = entityManager.find(Album.class, id);
+
+    if (album != null) {
+      album.softDelete();
+      entityManager.merge(album);
+    }
+  }
 }

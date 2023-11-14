@@ -21,4 +21,7 @@ public class Album extends BaseEntity {
     album.name = name;
     return album;
   }
+  public void softDelete() {
+    this.deletedAt = LocalDateTime.now();
+  }
 }

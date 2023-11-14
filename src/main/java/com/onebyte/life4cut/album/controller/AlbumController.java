@@ -23,6 +23,7 @@ import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,14 @@ public class AlbumController {
             request.memberUserIds(),
             request.guestUserIds());
     return ApiResponse.OK(new CreateAlbumResponse(albumId));
+  }
+
+  @DeleteMapping("/{albumId}")
+  public ApiResponse deleteAlbum(
+      @Min(1) @PathVariable("albumId") Long albumId,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    albumService.deleteAlbum(albumId, userDetails.getUserId());
+    return ApiResponse.OK();
   }
 
   @PostMapping("/{albumId}/pictures")

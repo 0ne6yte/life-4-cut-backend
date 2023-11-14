@@ -57,4 +57,7 @@ public class UserAlbum extends BaseEntity {
     userAlbum.role = role;
     return userAlbum;
   }
+  public void softDelete() {
+    this.deletedAt = LocalDateTime.now();
+  }
 }
