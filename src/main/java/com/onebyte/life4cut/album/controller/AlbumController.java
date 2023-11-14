@@ -1,5 +1,7 @@
 package com.onebyte.life4cut.album.controller;
 
+import com.onebyte.life4cut.album.controller.dto.CreateAlbumRequest;
+import com.onebyte.life4cut.album.controller.dto.CreateAlbumResponse;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureResponse;
 import com.onebyte.life4cut.album.controller.dto.GetMyRoleInAlbumResponse;
@@ -38,6 +40,18 @@ public class AlbumController {
   private final PictureService pictureService;
   private final PictureTagService pictureTagService;
   private final AlbumService albumService;
+
+  @PostMapping("")
+  public ApiResponse<CreateAlbumResponse> createAlbum(
+      @Valid CreateAlbumRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    Long albumId =
+        albumService.createAlbum(
+            request.name(),
+            userDetails.getUserId(),
+            request.memberUserIds(),
+            request.guestUserIds());
+    return ApiResponse.OK(new CreateAlbumResponse(albumId));
+  }
 
   @PostMapping("/{albumId}/pictures")
   public ApiResponse<CreatePictureResponse> uploadPicture(

@@ -36,4 +36,25 @@ public class UserAlbum extends BaseEntity {
   public boolean isGuest() {
     return role == UserAlbumRole.GUEST;
   }
+
+  public static UserAlbum createHost(@Nonnull Long albumId, @Nonnull Long userId) {
+    return createUserAlbum(albumId, userId, UserAlbumRole.HOST);
+  }
+
+  public static UserAlbum createMember(@Nonnull Long albumId, @Nonnull Long userId) {
+    return createUserAlbum(albumId, userId, UserAlbumRole.MEMBER);
+  }
+
+  public static UserAlbum createGuest(@Nonnull Long albumId, @Nonnull Long userId) {
+    return createUserAlbum(albumId, userId, UserAlbumRole.GUEST);
+  }
+
+  private static UserAlbum createUserAlbum(
+      @Nonnull Long albumId, @Nonnull Long userId, @Nonnull UserAlbumRole role) {
+    UserAlbum userAlbum = new UserAlbum();
+    userAlbum.albumId = albumId;
+    userAlbum.userId = userId;
+    userAlbum.role = role;
+    return userAlbum;
+  }
 }

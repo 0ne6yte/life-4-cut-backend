@@ -5,4 +5,6 @@ import java.util.Optional;
 
 public interface UserAlbumRepository {
   Optional<UserAlbum> findByUserIdAndAlbumId(Long userId, Long albumId);
+
+  UserAlbum save(UserAlbum userAlbum);
 }

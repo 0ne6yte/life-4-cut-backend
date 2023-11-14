@@ -15,4 +15,10 @@ public class Album extends BaseEntity {
   private String name;
 
   @Nullable @Column private LocalDateTime deletedAt;
+
+  public static Album create(@Nonnull String name) {
+    Album album = new Album();
+    album.name = name;
+    return album;
+  }
 }
