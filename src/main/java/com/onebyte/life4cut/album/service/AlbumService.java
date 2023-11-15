@@ -8,7 +8,9 @@ import com.onebyte.life4cut.album.exception.UserAlbumRolePermissionException;
 import com.onebyte.life4cut.album.repository.AlbumRepository;
 import com.onebyte.life4cut.album.repository.UserAlbumRepository;
 import jakarta.annotation.Nonnull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,22 +36,30 @@ public class AlbumService {
 
   public Long createAlbum(
       @Nonnull String name, Long userId, List<Long> memberUserIds, List<Long> guestUserIds) {
+    Set<Long> userIds = new HashSet<>();
 
     Album album = Album.create(name);
     albumRepository.save(album);
     Long albumId = album.getId();
     UserAlbum hostUserAlbum = UserAlbum.createHost(albumId, userId);
+
     userAlbumRepository.save(hostUserAlbum);
+    userIds.add(userId);
+
     if (memberUserIds != null) {
       for (Long memberId : memberUserIds) {
-        UserAlbum memberUserAlbum = UserAlbum.createMember(albumId, memberId);
-        userAlbumRepository.save(memberUserAlbum);
+        if (userIds.add(memberId)) {
+          UserAlbum memberUserAlbum = UserAlbum.createMember(albumId, memberId);
+          userAlbumRepository.save(memberUserAlbum);
+        }
       }
     }
     if (guestUserIds != null) {
       for (Long guestId : guestUserIds) {
-        UserAlbum guestUserAlbum = UserAlbum.createGuest(albumId, guestId);
-        userAlbumRepository.save(guestUserAlbum);
+        if (userIds.add(guestId)) {
+          UserAlbum guestUserAlbum = UserAlbum.createGuest(albumId, guestId);
+          userAlbumRepository.save(guestUserAlbum);
+        }
       }
     }
 
