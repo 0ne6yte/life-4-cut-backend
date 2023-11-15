@@ -74,11 +74,54 @@ public class AlbumService {
             .findByUserIdAndAlbumId(userId, albumId)
             .orElseThrow(UserAlbumRolePermissionException::new);
 
-    if (userAlbum.getRole() == UserAlbumRole.HOST) {
+    if (userAlbum.isHost()) {
       albumRepository.deleteById(albumId);
       userAlbumRepository.deleteByAlbumId(albumId);
     } else {
       userAlbumRepository.delete(userAlbum);
     }
   }
+
+  public void updateAlbum(
+      Long albumId, String name, Long userId, List<Long> memberUserIds, List<Long> guestUserIds) {
+    Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumNotFoundException());
+    UserAlbum userAlbum =
+        userAlbumRepository
+            .findByUserIdAndAlbumId(userId, albumId)
+            .orElseThrow(UserAlbumRolePermissionException::new);
+
+    if (!userAlbum.isHost()) {
+      throw new UserAlbumRolePermissionException();
+    }
+    userAlbumRepository.deleteByAlbumId(albumId);
+    if (name != null) {
+      album.setName(name);
+    }
+    albumRepository.save(album);
+
+    Set<Long> userIds = new HashSet<>();
+
+    UserAlbum hostUserAlbum = UserAlbum.createHost(albumId, userId);
+
+    userAlbumRepository.save(hostUserAlbum);
+    userIds.add(userId);
+
+    if (memberUserIds != null) {
+      for (Long memberId : memberUserIds) {
+        if (userIds.add(memberId)) {
+          UserAlbum memberUserAlbum = UserAlbum.createMember(albumId, memberId);
+          userAlbumRepository.save(memberUserAlbum);
+        }
+      }
+    }
+    if (guestUserIds != null) {
+      for (Long guestId : guestUserIds) {
+        if (userIds.add(guestId)) {
+          UserAlbum guestUserAlbum = UserAlbum.createGuest(albumId, guestId);
+          userAlbumRepository.save(guestUserAlbum);
+        }
+      }
+    }
+  }
+
 }

@@ -6,10 +6,12 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
+import lombok.Setter;
 
 @Entity
 public class Album extends BaseEntity {
 
+  @Setter
   @Nonnull
   @Column(nullable = false)
   private String name;
@@ -21,6 +23,7 @@ public class Album extends BaseEntity {
     album.name = name;
     return album;
   }
+
   public void softDelete() {
     this.deletedAt = LocalDateTime.now();
   }

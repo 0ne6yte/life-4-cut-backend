@@ -37,6 +37,10 @@ public class UserAlbum extends BaseEntity {
     return role == UserAlbumRole.GUEST;
   }
 
+  public boolean isHost() {
+    return role == UserAlbumRole.HOST;
+  }
+
   public static UserAlbum createHost(@Nonnull Long albumId, @Nonnull Long userId) {
     return createUserAlbum(albumId, userId, UserAlbumRole.HOST);
   }
@@ -57,6 +61,7 @@ public class UserAlbum extends BaseEntity {
     userAlbum.role = role;
     return userAlbum;
   }
+
   public void softDelete() {
     this.deletedAt = LocalDateTime.now();
   }

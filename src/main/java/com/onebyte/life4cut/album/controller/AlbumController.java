@@ -8,6 +8,7 @@ import com.onebyte.life4cut.album.controller.dto.GetMyRoleInAlbumResponse;
 import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse;
 import com.onebyte.life4cut.album.controller.dto.SearchTagsRequest;
 import com.onebyte.life4cut.album.controller.dto.SearchTagsResponse;
+import com.onebyte.life4cut.album.controller.dto.UpdateAlbumRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.service.AlbumService;
@@ -59,6 +60,20 @@ public class AlbumController {
       @Min(1) @PathVariable("albumId") Long albumId,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     albumService.deleteAlbum(albumId, userDetails.getUserId());
+    return ApiResponse.OK();
+  }
+
+  @PatchMapping("/{albumId}")
+  public ApiResponse<EmptyResponse> updateAlbum(
+      @Min(1) @PathVariable("albumId") Long albumId,
+      @Valid UpdateAlbumRequest request,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    albumService.updateAlbum(
+        albumId,
+        request.name(),
+        userDetails.getUserId(),
+        request.memberUserIds(),
+        request.guestUserIds());
     return ApiResponse.OK();
   }
 
