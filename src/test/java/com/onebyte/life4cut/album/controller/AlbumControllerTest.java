@@ -309,16 +309,16 @@ class AlbumControllerTest extends ControllerTest {
       result
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.message").value("OK"))
-          .andExpect(jsonPath("$.data.pictures[0][0].pictureId").value(1))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].pictureId").value(1))
           .andExpect(
-              jsonPath("$.data.pictures[0][0].path")
+              jsonPath("$.data.pictures[0].slots[0].path")
                   .value("https://test-bucket.s3.ap-northeast-2.amazonaws.com/path"))
-          .andExpect(jsonPath("$.data.pictures[0][0].content").value("content"))
-          .andExpect(jsonPath("$.data.pictures[0][0].layout").value("FAT_HORIZONTAL"))
-          .andExpect(jsonPath("$.data.pictures[0][0].location").value("LEFT"))
-          .andExpect(jsonPath("$.data.pictures[0][0].picturedAt").value("2023-10-15T00:14:15"))
-          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[0]").value("tag1"))
-          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[1]").value("tag2"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].content").value("content"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].layout").value("FAT_HORIZONTAL"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].location").value("LEFT"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].picturedAt").value("2023-10-15T00:14:15"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[0]").value("tag1"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[1]").value("tag2"))
           .andDo(
               document(
                   "{class_name}/{method_name}",
