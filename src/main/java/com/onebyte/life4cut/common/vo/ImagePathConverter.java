@@ -4,9 +4,9 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class UrlPathConverter implements AttributeConverter<UrlPath, String> {
+public class ImagePathConverter implements AttributeConverter<ImagePath, String> {
   @Override
-  public String convertToDatabaseColumn(UrlPath attribute) {
+  public String convertToDatabaseColumn(ImagePath attribute) {
     if (attribute == null) {
       return null;
     }
@@ -14,11 +14,11 @@ public class UrlPathConverter implements AttributeConverter<UrlPath, String> {
   }
 
   @Override
-  public UrlPath convertToEntityAttribute(String dbData) {
+  public ImagePath convertToEntityAttribute(String dbData) {
     if (dbData == null) {
       return null;
     }
 
-    return UrlPath.of(dbData);
+    return ImagePath.of(dbData);
   }
 }

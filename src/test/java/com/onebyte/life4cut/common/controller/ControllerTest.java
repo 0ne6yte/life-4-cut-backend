@@ -8,7 +8,10 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.onebyte.life4cut.config.ImagePathSerializer;
+import com.onebyte.life4cut.config.TestS3EnvConfiguration;
 import com.onebyte.life4cut.config.TestSecurityConfiguration;
+import com.onebyte.life4cut.config.WebConfiguration;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,12 @@ import org.springframework.util.MultiValueMap;
 
 @AutoConfigureRestDocs
 @ExtendWith({MockitoExtension.class, RestDocumentationExtension.class, SpringExtension.class})
-@ImportAutoConfiguration(TestSecurityConfiguration.class)
+@ImportAutoConfiguration({
+  TestSecurityConfiguration.class,
+  TestS3EnvConfiguration.class,
+  WebConfiguration.class,
+  ImagePathSerializer.class
+})
 public abstract class ControllerTest {
 
   @Autowired protected MockMvc mockMvc;

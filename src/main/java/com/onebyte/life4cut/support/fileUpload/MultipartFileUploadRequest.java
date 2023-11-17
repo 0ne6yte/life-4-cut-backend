@@ -45,9 +45,9 @@ public class MultipartFileUploadRequest implements FileUploadRequest {
   @Override
   public String getFileName() {
     if (StringUtils.hasText(multipartFile.getOriginalFilename())) {
-      return String.format("/%s/%s", UUID.randomUUID(), multipartFile.getOriginalFilename());
+      return String.format("%s/%s", UUID.randomUUID(), multipartFile.getOriginalFilename());
     }
-    return String.format("/%s/%s", UUID.randomUUID(), DEFAULT_FILE_NAME);
+    return String.format("%s/%s", UUID.randomUUID(), DEFAULT_FILE_NAME);
   }
 
   @Nonnull

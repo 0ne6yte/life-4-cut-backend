@@ -74,8 +74,8 @@ class MultipartFileUploadRequestTest {
 
       // then
       String[] values = result.split("/");
-      assertThat(UUID_REGEX.matcher(values[1]).matches()).isTrue();
-      assertThat(result).isEqualTo("/" + values[1] + "/" + originalFileName);
+      assertThat(UUID_REGEX.matcher(values[0]).matches()).isTrue();
+      assertThat(result).isEqualTo(values[0] + "/" + originalFileName);
     }
 
     @Test
@@ -95,8 +95,8 @@ class MultipartFileUploadRequestTest {
 
       // then
       String[] values = result.split("/");
-      assertThat(UUID_REGEX.matcher(values[1]).matches()).isTrue();
-      assertThat(result).isEqualTo("/" + values[1] + "/" + "default_file_name");
+      assertThat(UUID_REGEX.matcher(values[0]).matches()).isTrue();
+      assertThat(result).isEqualTo(values[0] + "/" + "default_file_name");
     }
   }
 

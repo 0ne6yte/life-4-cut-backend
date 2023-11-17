@@ -1,5 +1,6 @@
 package com.onebyte.life4cut.album.controller.dto;
 
+import com.onebyte.life4cut.common.vo.ImagePath;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import jakarta.annotation.Nonnull;
@@ -37,7 +38,7 @@ public record GetPicturesInSlotResponse(List<List<PictureInSlot>> pictures) {
 
   record PictureInSlot(
       @Nullable Long pictureId,
-      @Nullable String path,
+      @Nullable ImagePath path,
       @Nullable String content,
       @Nonnull String layout,
       @Nonnull String location,

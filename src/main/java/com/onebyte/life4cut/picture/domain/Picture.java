@@ -1,11 +1,14 @@
 package com.onebyte.life4cut.picture.domain;
 
 import com.onebyte.life4cut.common.entity.BaseEntity;
+import com.onebyte.life4cut.common.vo.ImagePath;
+import com.onebyte.life4cut.common.vo.ImagePathConverter;
 import com.onebyte.life4cut.picture.domain.vo.PictureTagRelations;
 import com.onebyte.life4cut.pictureTag.domain.vo.PictureTags;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -35,7 +38,8 @@ public class Picture extends BaseEntity {
 
   @Nonnull
   @Column(nullable = false, length = 500)
-  private String path;
+  @Convert(converter = ImagePathConverter.class)
+  private ImagePath path;
 
   @Nonnull
   @Column(nullable = false, columnDefinition = "TEXT")
@@ -62,7 +66,7 @@ public class Picture extends BaseEntity {
     Picture picture = new Picture();
     picture.userId = userId;
     picture.albumId = albumId;
-    picture.path = path;
+    picture.path = ImagePath.of(path);
     picture.content = content.trim();
     picture.picturedAt = picturedAt;
     picture.pictureTagRelations = PictureTagRelations.of(picture, pictureTags);
@@ -82,7 +86,7 @@ public class Picture extends BaseEntity {
       this.picturedAt = picturedAt;
     }
     if (path != null) {
-      this.path = path;
+      this.path = ImagePath.of(path);
     }
   }
 
