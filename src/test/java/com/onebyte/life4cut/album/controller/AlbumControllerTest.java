@@ -338,28 +338,28 @@ class AlbumControllerTest extends ControllerTest {
                               fieldWithPath("data.pictures[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("페이지 목록"),
-                              fieldWithPath("data.pictures[].[]")
+                              fieldWithPath("data.pictures[].slots[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("페이지 내 슬롯 목록"),
-                              fieldWithPath("data.pictures[].[].pictureId")
+                              fieldWithPath("data.pictures[].slots[].pictureId")
                                   .type(NUMBER)
                                   .description("사진 아이디"),
-                              fieldWithPath("data.pictures[].[].path")
+                              fieldWithPath("data.pictures[].slots[].path")
                                   .type(STRING)
                                   .description("사진 경로"),
-                              fieldWithPath("data.pictures[].[].content")
+                              fieldWithPath("data.pictures[].slots[].content")
                                   .type(STRING)
                                   .description("사진 내용"),
-                              fieldWithPath("data.pictures[].[].layout")
+                              fieldWithPath("data.pictures[].slots[].layout")
                                   .type(STRING)
                                   .description("사진 레이아웃"),
-                              fieldWithPath("data.pictures[].[].location")
+                              fieldWithPath("data.pictures[].slots[].location")
                                   .type(STRING)
                                   .description("사진 위치"),
-                              fieldWithPath("data.pictures[].[].picturedAt")
+                              fieldWithPath("data.pictures[].slots[].picturedAt")
                                   .type(STRING)
                                   .description("사진 찍은 날짜"),
-                              fieldWithPath("data.pictures[].[].tagNames[]")
+                              fieldWithPath("data.pictures[].slots[].tagNames[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("사진 태그 목록")
                                   .attributes(
