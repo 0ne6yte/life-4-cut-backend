@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse.PictureInSlot;
 import com.onebyte.life4cut.common.vo.ImagePath;
+import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse.Slots;
 import com.onebyte.life4cut.picture.repository.dto.PictureDetailResult;
 import com.onebyte.life4cut.picture.service.dto.PictureDetailInSlot;
 import com.onebyte.life4cut.slot.domain.vo.SlotLayout;
@@ -62,45 +63,46 @@ class GetPicturesInSlotResponseTest {
       GetPicturesInSlotResponse result = GetPicturesInSlotResponse.of(pictureDetailInSlots);
 
       // then
-      List<List<PictureInSlot>> pictures = result.pictures();
+      List<Slots> pictures = result.pictures();
       assertThat(pictures).hasSize(4);
 
-      List<PictureInSlot> page1 = pictures.get(0);
-      assertThat(page1).hasSize(2);
-      assertThat(page1.get(0).pictureId()).isNull();
-      assertThat(page1.get(0).path()).isNull();
-      assertThat(page1.get(0).content()).isNull();
-      assertThat(page1.get(0).layout()).isEqualTo("LONG_VERTICAL");
-      assertThat(page1.get(0).location()).isEqualTo("LEFT");
-      assertThat(page1.get(0).picturedAt()).isNull();
-      assertThat(page1.get(0).tagNames()).isEmpty();
+      Slots page1 = pictures.get(0);
+      assertThat(page1.slots()).hasSize(2);
+      assertThat(page1.slots().get(0).pictureId()).isNull();
+      assertThat(page1.slots().get(0).path()).isNull();
+      assertThat(page1.slots().get(0).content()).isNull();
+      assertThat(page1.slots().get(0).layout()).isEqualTo("LONG_VERTICAL");
+      assertThat(page1.slots().get(0).location()).isEqualTo("LEFT");
+      assertThat(page1.slots().get(0).picturedAt()).isNull();
+      assertThat(page1.slots().get(0).tagNames()).isEmpty();
 
-      assertThat(page1.get(1).pictureId()).isEqualTo(1L);
-      assertThat(page1.get(1).path()).isEqualTo(ImagePath.of("path"));
-      assertThat(page1.get(1).content()).isEqualTo("content");
-      assertThat(page1.get(1).layout()).isEqualTo("LONG_VERTICAL");
-      assertThat(page1.get(1).location()).isEqualTo("RIGHT");
-      assertThat(page1.get(1).picturedAt()).isEqualTo(LocalDateTime.of(2023, 10, 14, 11, 52, 0));
-      assertThat(page1.get(1).tagNames()).containsExactly("tag1", "tag2");
+      assertThat(page1.slots().get(1).pictureId()).isEqualTo(1L);
+      assertThat(page1.slots().get(1).path()).isEqualTo(ImagePath.of("path"));
+      assertThat(page1.slots().get(1).content()).isEqualTo("content");
+      assertThat(page1.slots().get(1).layout()).isEqualTo("LONG_VERTICAL");
+      assertThat(page1.slots().get(1).location()).isEqualTo("RIGHT");
+      assertThat(page1.slots().get(1).picturedAt())
+          .isEqualTo(LocalDateTime.of(2023, 10, 14, 11, 52, 0));
+      assertThat(page1.slots().get(1).tagNames()).containsExactly("tag1", "tag2");
 
-      List<PictureInSlot> page2 = pictures.get(1);
-      assertThat(page2).hasSize(1);
-      assertThat(page2.get(0).pictureId()).isNull();
-      assertThat(page2.get(0).path()).isNull();
-      assertThat(page2.get(0).content()).isNull();
-      assertThat(page2.get(0).layout()).isEqualTo("FAT_HORIZONTAL");
-      assertThat(page2.get(0).location()).isEqualTo("LEFT");
-      assertThat(page2.get(0).picturedAt()).isNull();
-      assertThat(page2.get(0).tagNames()).isEmpty();
+      Slots page2 = pictures.get(1);
+      assertThat(page2.slots()).hasSize(1);
+      assertThat(page2.slots().get(0).pictureId()).isNull();
+      assertThat(page2.slots().get(0).path()).isNull();
+      assertThat(page2.slots().get(0).content()).isNull();
+      assertThat(page2.slots().get(0).layout()).isEqualTo("FAT_HORIZONTAL");
+      assertThat(page2.slots().get(0).location()).isEqualTo("LEFT");
+      assertThat(page2.slots().get(0).picturedAt()).isNull();
+      assertThat(page2.slots().get(0).tagNames()).isEmpty();
 
-      List<PictureInSlot> page3 = pictures.get(2);
-      assertThat(page3).hasSize(1);
-      assertThat(page3.get(0).pictureId()).isEqualTo(2L);
+      Slots page3 = pictures.get(2);
+      assertThat(page3.slots()).hasSize(1);
+      assertThat(page3.slots().get(0).pictureId()).isEqualTo(2L);
 
-      List<PictureInSlot> page4 = pictures.get(3);
-      assertThat(page4).hasSize(2);
-      assertThat(page4.get(0).pictureId()).isNull();
-      assertThat(page4.get(1).pictureId()).isNull();
+      Slots page4 = pictures.get(3);
+      assertThat(page4.slots()).hasSize(2);
+      assertThat(page4.slots().get(0).pictureId()).isNull();
+      assertThat(page4.slots().get(1).pictureId()).isNull();
     }
   }
 }

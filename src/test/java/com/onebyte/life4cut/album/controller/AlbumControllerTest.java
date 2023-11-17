@@ -309,16 +309,16 @@ class AlbumControllerTest extends ControllerTest {
       result
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.message").value("OK"))
-          .andExpect(jsonPath("$.data.pictures[0][0].pictureId").value(1))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].pictureId").value(1))
           .andExpect(
-              jsonPath("$.data.pictures[0][0].path")
+              jsonPath("$.data.pictures[0].slots[0].path")
                   .value("https://test-bucket.s3.ap-northeast-2.amazonaws.com/path"))
-          .andExpect(jsonPath("$.data.pictures[0][0].content").value("content"))
-          .andExpect(jsonPath("$.data.pictures[0][0].layout").value("FAT_HORIZONTAL"))
-          .andExpect(jsonPath("$.data.pictures[0][0].location").value("LEFT"))
-          .andExpect(jsonPath("$.data.pictures[0][0].picturedAt").value("2023-10-15T00:14:15"))
-          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[0]").value("tag1"))
-          .andExpect(jsonPath("$.data.pictures[0][0].tagNames[1]").value("tag2"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].content").value("content"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].layout").value("FAT_HORIZONTAL"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].location").value("LEFT"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].picturedAt").value("2023-10-15T00:14:15"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[0]").value("tag1"))
+          .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[1]").value("tag2"))
           .andDo(
               document(
                   "{class_name}/{method_name}",
@@ -338,28 +338,28 @@ class AlbumControllerTest extends ControllerTest {
                               fieldWithPath("data.pictures[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("페이지 목록"),
-                              fieldWithPath("data.pictures[].[]")
+                              fieldWithPath("data.pictures[].slots[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("페이지 내 슬롯 목록"),
-                              fieldWithPath("data.pictures[].[].pictureId")
+                              fieldWithPath("data.pictures[].slots[].pictureId")
                                   .type(NUMBER)
                                   .description("사진 아이디"),
-                              fieldWithPath("data.pictures[].[].path")
+                              fieldWithPath("data.pictures[].slots[].path")
                                   .type(STRING)
                                   .description("사진 경로"),
-                              fieldWithPath("data.pictures[].[].content")
+                              fieldWithPath("data.pictures[].slots[].content")
                                   .type(STRING)
                                   .description("사진 내용"),
-                              fieldWithPath("data.pictures[].[].layout")
+                              fieldWithPath("data.pictures[].slots[].layout")
                                   .type(STRING)
                                   .description("사진 레이아웃"),
-                              fieldWithPath("data.pictures[].[].location")
+                              fieldWithPath("data.pictures[].slots[].location")
                                   .type(STRING)
                                   .description("사진 위치"),
-                              fieldWithPath("data.pictures[].[].picturedAt")
+                              fieldWithPath("data.pictures[].slots[].picturedAt")
                                   .type(STRING)
                                   .description("사진 찍은 날짜"),
-                              fieldWithPath("data.pictures[].[].tagNames[]")
+                              fieldWithPath("data.pictures[].slots[].tagNames[]")
                                   .type(JsonFieldType.ARRAY)
                                   .description("사진 태그 목록")
                                   .attributes(

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record GetPicturesInSlotResponse(List<List<PictureInSlot>> pictures) {
+public record GetPicturesInSlotResponse(List<Slots> pictures) {
 
   public static GetPicturesInSlotResponse of(List<PictureDetailInSlot> picturesBySlot) {
     if (picturesBySlot.isEmpty()) {
@@ -19,19 +19,19 @@ public record GetPicturesInSlotResponse(List<List<PictureInSlot>> pictures) {
 
     Long lastPage = picturesBySlot.get(0).page();
 
-    List<List<PictureInSlot>> pictures = new ArrayList<>();
-    List<PictureInSlot> currentPictureInSlots = new ArrayList<>();
+    List<Slots> pictures = new ArrayList<>();
+    Slots slots = new Slots(new ArrayList<>());
     for (PictureDetailInSlot pictureDetailInSlot : picturesBySlot) {
       if (!lastPage.equals(pictureDetailInSlot.page())) {
-        pictures.add(currentPictureInSlots);
-        currentPictureInSlots = new ArrayList<>();
+        pictures.add(slots);
+        slots = new Slots(new ArrayList<>());
         lastPage = pictureDetailInSlot.page();
       }
 
-      currentPictureInSlots.add(PictureInSlot.of(pictureDetailInSlot));
+      slots.slots.add(PictureInSlot.of(pictureDetailInSlot));
     }
 
-    pictures.add(currentPictureInSlots);
+    pictures.add(slots);
 
     return new GetPicturesInSlotResponse(pictures);
   }
@@ -68,4 +68,6 @@ public record GetPicturesInSlotResponse(List<List<PictureInSlot>> pictures) {
           pictureDetailResult.tagNames());
     }
   }
+
+  record Slots(List<PictureInSlot> slots) {}
 }
