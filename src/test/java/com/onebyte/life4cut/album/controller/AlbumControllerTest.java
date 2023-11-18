@@ -15,6 +15,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,7 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
 import com.epages.restdocs.apispec.SimpleType;
+import com.onebyte.life4cut.album.controller.dto.CreateAlbumRequest;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
+import com.onebyte.life4cut.album.controller.dto.UpdateAlbumRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.service.AlbumService;
@@ -50,6 +53,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.generate.RestDocumentationGenerator;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.ResultActions;
@@ -397,4 +401,150 @@ class AlbumControllerTest extends ControllerTest {
                           .build())));
     }
   }
+
+  @Nested
+  @WithCustomMockUser
+  class CreateAlbum {
+
+    @Test
+    @DisplayName("앨범을 생성한다")
+    void createAlbum() throws Exception {
+      // given
+      String albumName = "앨범이름";
+      List<Long> memberUserIds = List.of(1L, 2L);
+      List<Long> guestUserIds = List.of(3L, 4L);
+
+      CreateAlbumRequest request = new CreateAlbumRequest(albumName, memberUserIds, guestUserIds);
+
+      when(albumService.createAlbum(any(), any(), any(), any())).thenReturn(123L);
+
+      // when
+      ResultActions result =
+          mockMvc.perform(
+              RestDocumentationRequestBuilders.post("/api/v1/albums")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(request)));
+
+      // then
+      result
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.message").value("OK"))
+          .andExpect(jsonPath("$.data.id").value(123))
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범을 생성한다")
+                          .summary("앨범을 생성한다")
+                          .responseFields(
+                              fieldWithPath("message").type(STRING).description("응답 메시지"),
+                              fieldWithPath("data.id").type(NUMBER).description("앨범 아이디"))
+                          .requestSchema(Schema.schema("CreateAlbumRequest"))
+                          .responseSchema(Schema.schema("CreateAlbumResponse"))
+                          .build())));
+    }
+  }
+
+  @Nested
+  @WithCustomMockUser
+  class DeleteAlbum {
+
+    @Test
+    @DisplayName("앨범을 삭제한다")
+    void deleteAlbum() throws Exception {
+      // given
+      Long albumId = 1L;
+
+      doNothing().when(albumService).deleteAlbum(any(), any());
+
+      // when
+      ResultActions result =
+          mockMvc.perform(
+              RestDocumentationRequestBuilders.delete("/api/v1/albums/{albumId}", albumId));
+
+      // then
+      result
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.message").value("OK"))
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범을 삭제한다")
+                          .summary("앨범을 삭제한다")
+                          .pathParameters(
+                              parameterWithName("albumId")
+                                  .description("앨범 아이디")
+                                  .type(SimpleType.NUMBER))
+                          .responseFields(
+                              fieldWithPath("message").type(STRING).description("응답 메시지"),
+                              fieldWithPath("data").optional().description("빈 객체"))
+                          .requestSchema(Schema.schema("DeleteAlbumRequest"))
+                          .responseSchema(Schema.schema("DeleteAlbumResponse"))
+                          .build())));
+    }
+  }
+
+  @Nested
+  @WithCustomMockUser
+  class UpdateAlbumTest {
+
+    @Test
+    @DisplayName("앨범을 업데이트한다")
+    void updateAlbum() throws Exception {
+      // Given
+      Long albumId = 1L;
+      String albumName = "새로운앨범이름";
+      List<Long> memberUserIds = List.of(5L, 6L);
+      List<Long> guestUserIds = List.of(7L, 8L);
+
+      UpdateAlbumRequest request = new UpdateAlbumRequest(albumName, memberUserIds, guestUserIds);
+
+      doNothing().when(albumService).updateAlbum(any(), any(), any(), any(), any());
+
+      // When
+      ResultActions result =
+          mockMvc.perform(
+              RestDocumentationRequestBuilders.patch("/api/v1/albums/{albumId}", albumId)
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(request)));
+
+      // Then
+      result
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.message").value("OK"))
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범을 업데이트한다")
+                          .summary("앨범을 업데이트한다")
+                          .pathParameters(
+                              parameterWithName("albumId")
+                                  .description("앨범 아이디")
+                                  .type(SimpleType.NUMBER))
+                          .requestSchema(Schema.schema("UpdateAlbumRequest"))
+                          .responseSchema(Schema.schema("EmptyResponse"))
+                          .build()),
+                  requestFields(
+                      fieldWithPath("name").type(STRING).description("앨범 이름").optional(),
+                      fieldWithPath("memberUserIds[]")
+                          .type(JsonFieldType.ARRAY)
+                          .description("멤버 사용자 아이디 목록")
+                          .attributes(Attributes.key("itemType").value(JsonFieldType.NUMBER))
+                          .optional(),
+                      fieldWithPath("guestUserIds[]")
+                          .type(JsonFieldType.ARRAY)
+                          .description("게스트 사용자 아이디 목록")
+                          .attributes(Attributes.key("itemType").value(JsonFieldType.NUMBER))
+                          .optional())));
+    }
+  }
+  //
 }
