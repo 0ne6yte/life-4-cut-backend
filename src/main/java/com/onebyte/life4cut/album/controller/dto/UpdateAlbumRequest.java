@@ -2,7 +2,6 @@ package com.onebyte.life4cut.album.controller.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-
 import java.util.List;
 
 public record UpdateAlbumRequest(

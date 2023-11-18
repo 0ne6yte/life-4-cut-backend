@@ -35,7 +35,10 @@ public class AlbumService {
   }
 
   public Long createAlbum(
-      @Nonnull String name, Long userId, List<Long> memberUserIds, List<Long> guestUserIds) {
+      @Nonnull String name,
+      @Nonnull Long userId,
+      List<Long> memberUserIds,
+      List<Long> guestUserIds) {
     Set<Long> userIds = new HashSet<>();
 
     Album album = Album.create(name);
@@ -123,5 +126,4 @@ public class AlbumService {
       }
     }
   }
-
 }

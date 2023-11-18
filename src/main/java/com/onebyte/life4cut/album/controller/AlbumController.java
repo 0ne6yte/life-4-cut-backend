@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,8 @@ public class AlbumController {
 
   @PostMapping("")
   public ApiResponse<CreateAlbumResponse> createAlbum(
-      @Valid CreateAlbumRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+      @Valid @RequestBody CreateAlbumRequest request,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
     Long albumId =
         albumService.createAlbum(
             request.name(),
@@ -56,7 +58,7 @@ public class AlbumController {
   }
 
   @DeleteMapping("/{albumId}")
-  public ApiResponse deleteAlbum(
+  public ApiResponse<EmptyResponse> deleteAlbum(
       @Min(1) @PathVariable("albumId") Long albumId,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     albumService.deleteAlbum(albumId, userDetails.getUserId());
@@ -66,7 +68,7 @@ public class AlbumController {
   @PatchMapping("/{albumId}")
   public ApiResponse<EmptyResponse> updateAlbum(
       @Min(1) @PathVariable("albumId") Long albumId,
-      @Valid UpdateAlbumRequest request,
+      @Valid @RequestBody UpdateAlbumRequest request,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     albumService.updateAlbum(
         albumId,
