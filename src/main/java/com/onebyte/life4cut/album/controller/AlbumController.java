@@ -1,11 +1,14 @@
 package com.onebyte.life4cut.album.controller;
 
+import com.onebyte.life4cut.album.controller.dto.CreateAlbumRequest;
+import com.onebyte.life4cut.album.controller.dto.CreateAlbumResponse;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureResponse;
 import com.onebyte.life4cut.album.controller.dto.GetMyRoleInAlbumResponse;
 import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse;
 import com.onebyte.life4cut.album.controller.dto.SearchTagsRequest;
 import com.onebyte.life4cut.album.controller.dto.SearchTagsResponse;
+import com.onebyte.life4cut.album.controller.dto.UpdateAlbumRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.service.AlbumService;
@@ -21,10 +24,12 @@ import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +43,41 @@ public class AlbumController {
   private final PictureService pictureService;
   private final PictureTagService pictureTagService;
   private final AlbumService albumService;
+
+  @PostMapping("")
+  public ApiResponse<CreateAlbumResponse> createAlbum(
+      @Valid @RequestBody CreateAlbumRequest request,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    Long albumId =
+        albumService.createAlbum(
+            request.name(),
+            userDetails.getUserId(),
+            request.memberUserIds(),
+            request.guestUserIds());
+    return ApiResponse.OK(new CreateAlbumResponse(albumId));
+  }
+
+  @DeleteMapping("/{albumId}")
+  public ApiResponse<EmptyResponse> deleteAlbum(
+      @Min(1) @PathVariable("albumId") Long albumId,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    albumService.deleteAlbum(albumId, userDetails.getUserId());
+    return ApiResponse.OK();
+  }
+
+  @PatchMapping("/{albumId}")
+  public ApiResponse<EmptyResponse> updateAlbum(
+      @Min(1) @PathVariable("albumId") Long albumId,
+      @Valid @RequestBody UpdateAlbumRequest request,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    albumService.updateAlbum(
+        albumId,
+        request.name(),
+        userDetails.getUserId(),
+        request.memberUserIds(),
+        request.guestUserIds());
+    return ApiResponse.OK();
+  }
 
   @PostMapping("/{albumId}/pictures")
   public ApiResponse<CreatePictureResponse> uploadPicture(
