@@ -2,6 +2,7 @@ package com.onebyte.life4cut.album.controller;
 
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureResponse;
+import com.onebyte.life4cut.album.controller.dto.GetAlbumInfoResponse;
 import com.onebyte.life4cut.album.controller.dto.GetMyRoleInAlbumResponse;
 import com.onebyte.life4cut.album.controller.dto.GetPicturesInSlotResponse;
 import com.onebyte.life4cut.album.controller.dto.SearchTagsRequest;
@@ -9,6 +10,7 @@ import com.onebyte.life4cut.album.controller.dto.SearchTagsResponse;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
 import com.onebyte.life4cut.album.service.AlbumService;
+import com.onebyte.life4cut.album.service.dto.AlbumInfo;
 import com.onebyte.life4cut.auth.dto.CustomUserDetails;
 import com.onebyte.life4cut.common.web.ApiResponse;
 import com.onebyte.life4cut.common.web.EmptyResponse;
@@ -105,5 +107,14 @@ public class AlbumController {
     UserAlbumRole userAlbumRole = albumService.getRoleInAlbum(albumId, userDetails.getUserId());
 
     return ApiResponse.OK(new GetMyRoleInAlbumResponse(userAlbumRole));
+  }
+
+  @GetMapping("/{albumId}")
+  public ApiResponse<GetAlbumInfoResponse> getAlbumInfo(
+      @Min(1) @PathVariable("albumId") Long albumId,
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    AlbumInfo albumInfo = albumService.getAlbumInfo(albumId, userDetails.getUserId());
+
+    return ApiResponse.OK(GetAlbumInfoResponse.of(albumInfo));
   }
 }
