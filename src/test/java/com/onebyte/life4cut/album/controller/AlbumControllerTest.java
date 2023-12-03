@@ -441,7 +441,45 @@ class AlbumControllerTest extends ControllerTest {
           .andExpect(jsonPath("$.data.sharedUsers[0].id").value(1))
           .andExpect(jsonPath("$.data.sharedUsers[0].profilePath").value("http://~~"))
           .andExpect(jsonPath("$.data.sharedUsers[0].nickname").value("codingDog"))
-          .andExpect(jsonPath("$.data.sharedUsers[0].role").value("HOST"));
+          .andExpect(jsonPath("$.data.sharedUsers[0].role").value("HOST"))
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  preprocessRequest(prettyPrint()),
+                  preprocessResponse(prettyPrint()),
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범명, 공유하고 있는 유저 등 앨범 세부 내용을 조회한다")
+                          .summary("앨범 세부 내용을 조회한다")
+                          .pathParameters(
+                              parameterWithName("albumId")
+                                  .description("앨범 아이디")
+                                  .type(SimpleType.NUMBER))
+                          .responseFields(
+                              fieldWithPath("message").type(STRING).description("응답 메시지"),
+                              fieldWithPath("data.albumId").type(NUMBER).description("앨범 id"),
+                              fieldWithPath("data.albumName").type(STRING).description("앨범명"),
+                              fieldWithPath("data.sharedCount")
+                                  .type(NUMBER)
+                                  .description("앨범 공유자 수"),
+                              fieldWithPath("data.sharedUsers[]")
+                                  .type(JsonFieldType.ARRAY)
+                                  .description("앨범 공유자 목록"),
+                              fieldWithPath("data.sharedUsers[].id")
+                                  .type(NUMBER)
+                                  .description("유저 id"),
+                              fieldWithPath("data.sharedUsers[].profilePath")
+                                  .type(STRING)
+                                  .description("프로필 이미지 경로"),
+                              fieldWithPath("data.sharedUsers[].nickname")
+                                  .type(STRING)
+                                  .description("닉네임"),
+                              fieldWithPath("data.sharedUsers[].role")
+                                  .type(STRING)
+                                  .description("앨범에 대한 권한"))
+                          .responseSchema(Schema.schema("GetAlbumInfoResponse"))
+                          .build())));
     }
   }
 }
