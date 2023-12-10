@@ -37,9 +37,9 @@ public class UserAlbumRepositoryImpl implements UserAlbumRepository {
             Projections.constructor(
                 UserDetailResult.class, user.id, user.profilePath, user.nickname, userAlbum.role))
         .from(userAlbum)
-        .where(userAlbum.albumId.eq(albumId))
         .leftJoin(user)
         .on(userAlbum.userId.eq(user.id))
+        .where(userAlbum.albumId.eq(albumId))
         .fetch();
   }
 }
