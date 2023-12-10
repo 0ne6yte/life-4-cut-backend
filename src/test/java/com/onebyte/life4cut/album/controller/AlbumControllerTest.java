@@ -26,7 +26,9 @@ import com.epages.restdocs.apispec.SimpleType;
 import com.onebyte.life4cut.album.controller.dto.CreatePictureRequest;
 import com.onebyte.life4cut.album.controller.dto.UpdatePictureRequest;
 import com.onebyte.life4cut.album.domain.vo.UserAlbumRole;
+import com.onebyte.life4cut.album.repository.dto.UserDetailResult;
 import com.onebyte.life4cut.album.service.AlbumService;
+import com.onebyte.life4cut.album.service.dto.AlbumInfo;
 import com.onebyte.life4cut.common.annotation.WithCustomMockUser;
 import com.onebyte.life4cut.common.controller.ControllerTest;
 import com.onebyte.life4cut.common.vo.ImagePath;
@@ -316,7 +318,8 @@ class AlbumControllerTest extends ControllerTest {
           .andExpect(jsonPath("$.data.pictures[0].slots[0].content").value("content"))
           .andExpect(jsonPath("$.data.pictures[0].slots[0].layout").value("FAT_HORIZONTAL"))
           .andExpect(jsonPath("$.data.pictures[0].slots[0].location").value("LEFT"))
-          .andExpect(jsonPath("$.data.pictures[0].slots[0].picturedAt").value("2023-10-15T00:14:15"))
+          .andExpect(
+              jsonPath("$.data.pictures[0].slots[0].picturedAt").value("2023-10-15T00:14:15"))
           .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[0]").value("tag1"))
           .andExpect(jsonPath("$.data.pictures[0].slots[0].tagNames[1]").value("tag2"))
           .andDo(
@@ -405,6 +408,77 @@ class AlbumControllerTest extends ControllerTest {
                               fieldWithPath("message").type(STRING).description("응답 메시지"),
                               fieldWithPath("data.role").type(STRING).description("앨범에 대한 내 권한"))
                           .responseSchema(Schema.schema("GetMyRoleInAlbumResponse"))
+                          .build())));
+    }
+  }
+
+  @Nested
+  @WithCustomMockUser
+  class GetAlbumInfo {
+
+    @Test
+    @DisplayName("앨범에 대한 세부 정보를 조회한다")
+    void getAlbumInfo() throws Exception {
+      // given
+      Long albumId = 1L;
+      when(albumService.getAlbumInfo(any(), any()))
+          .thenReturn(
+              new AlbumInfo(
+                  1L,
+                  "앨범명",
+                  List.of(new UserDetailResult(1L, "http://~~", "codingDog", UserAlbumRole.HOST))));
+
+      // when
+      ResultActions result = mockMvc.perform(get("/api/v1/albums/{albumId}", albumId));
+
+      // then
+      result
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.message").value("OK"))
+          .andExpect(jsonPath("$.data.albumId").value(1))
+          .andExpect(jsonPath("$.data.albumName").value("앨범명"))
+          .andExpect(jsonPath("$.data.sharedCount").value(1))
+          .andExpect(jsonPath("$.data.sharedUsers[0].id").value(1))
+          .andExpect(jsonPath("$.data.sharedUsers[0].profilePath").value("http://~~"))
+          .andExpect(jsonPath("$.data.sharedUsers[0].nickname").value("codingDog"))
+          .andExpect(jsonPath("$.data.sharedUsers[0].role").value("HOST"))
+          .andDo(
+              document(
+                  "{class_name}/{method_name}",
+                  preprocessRequest(prettyPrint()),
+                  preprocessResponse(prettyPrint()),
+                  resource(
+                      ResourceSnippetParameters.builder()
+                          .tag(API_TAG)
+                          .description("앨범명, 공유하고 있는 유저 등 앨범 세부 내용을 조회한다")
+                          .summary("앨범 세부 내용을 조회한다")
+                          .pathParameters(
+                              parameterWithName("albumId")
+                                  .description("앨범 아이디")
+                                  .type(SimpleType.NUMBER))
+                          .responseFields(
+                              fieldWithPath("message").type(STRING).description("응답 메시지"),
+                              fieldWithPath("data.albumId").type(NUMBER).description("앨범 id"),
+                              fieldWithPath("data.albumName").type(STRING).description("앨범명"),
+                              fieldWithPath("data.sharedCount")
+                                  .type(NUMBER)
+                                  .description("앨범 공유자 수"),
+                              fieldWithPath("data.sharedUsers[]")
+                                  .type(JsonFieldType.ARRAY)
+                                  .description("앨범 공유자 목록"),
+                              fieldWithPath("data.sharedUsers[].id")
+                                  .type(NUMBER)
+                                  .description("유저 id"),
+                              fieldWithPath("data.sharedUsers[].profilePath")
+                                  .type(STRING)
+                                  .description("프로필 이미지 경로"),
+                              fieldWithPath("data.sharedUsers[].nickname")
+                                  .type(STRING)
+                                  .description("닉네임"),
+                              fieldWithPath("data.sharedUsers[].role")
+                                  .type(STRING)
+                                  .description("앨범에 대한 권한"))
+                          .responseSchema(Schema.schema("GetAlbumInfoResponse"))
                           .build())));
     }
   }
